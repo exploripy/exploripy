@@ -26,4 +26,4 @@ eda.EDAToHTML()
 
 **Categorical Variables**
 <p>
-<img src='doc_images/Categorical.png'>
+<img src='/ExploriPy/doc_images/Categorical.png'>
