@@ -270,7 +270,6 @@ class EDA:
 						else:
 							IVInsight = InsightStat.format(IndependentVar,"very poor predictor",DependentVar)
 					else:
-						print(DependentVar + " is not a binary variable")
 						WOE = dict()
 						IV = 0
 						IVInsight = "NotBinary"
@@ -354,12 +353,9 @@ class EDA:
 		sns.set(style="ticks", color_codes=True)
 		this_dir, this_filename = os.path.split(__file__)
 		OutFileName = os.path.join(this_dir, 'HTMLTemplate/dist/output/Scatter.png')
-		#print('executing scatterplot...')
-		#print(OutFileName)
 		fig, ax = plt.subplots()
 		ax = sns.pairplot(self.df[self.ContinuousFeatures].dropna(),markers="+",palette="husl",kind="reg", plot_kws={'line_kws':{'color':'orange'}})
 		plt.savefig(OutFileName)
-		#print(OutFileName)
 		end = time.time()
 		if self.debug == 'YES':
 			print('ScatterPlot',end-start)
