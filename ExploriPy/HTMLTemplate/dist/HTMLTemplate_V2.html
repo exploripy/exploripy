@@ -729,10 +729,10 @@
 						   
 						    <div class="card">
 							   <div class="card-header">
-								  <h3 class="card-title">CoRelation Heatmap</h3>
+								  <h3 class="card-title">Correlation Heatmap</h3>
 							   </div>
 							   <div class="card-body text-center">
-									<div class = "row">
+									<div class = "row align-items-center"">
 										<div id="CorrChart"><!-- Plotly chart will be drawn inside this DIV --></div>
 										<script>
 											  var colorscaleValue = [
@@ -1027,6 +1027,7 @@
 																			<th>Target</th>
 																			<th>Feature</th>
 																			<th>Chi Square</th>
+																			<th>P-Value</th>
 																		 </tr>
 																	  </thead>
 																	  <tbody>
@@ -1034,7 +1035,8 @@
 																		 <tr>
 																			<td style="width: 146.4px;">{{row["DependentVar"]}}</td>
 																			<td style="width: 147.2px;">{{row["IndependentVar"]}}</td>
-																			<td style="width: 147.2px;">{{row["ChiSq"]}}</td>
+																			<td style="width: 147.2px;">{{row["ChiSq"]|round(5)}}</td>
+																			<td style="width: 147.2px;">{{row["PValue"]|round(5)}}</td>
 																		 </tr>
 																		 {% endfor %}
 																	  </tbody>
@@ -1058,6 +1060,7 @@
 																			<th>Target</th>
 																			<th>Feature</th>
 																			<th>Chi Square</th>
+																			<th>P-Value</th>
 																		 </tr>
 																	  </thead>
 																	  <tbody>
@@ -1065,7 +1068,8 @@
 																		 <tr>
 																			<td style="width: 146.4px;">{{row["DependentVar"]}}</td>
 																			<td style="width: 147.2px;">{{row["IndependentVar"]}}</td>
-																			<td style="width: 147.2px;">{{row["ChiSq"]}}</td>
+																			<td style="width: 147.2px;">{{row["ChiSq"]|round(5)}}</td>
+																			<td style="width: 147.2px;">{{row["PValue"]|round(5)}}</td>
 																		 </tr>
 																		 {% endfor %}
 																	  </tbody>
@@ -1139,93 +1143,104 @@
 													<table width = "100%">
 														<tbody>
 															<tr>
-																<td colspan="3">
-																	{% if (entry["IVInsight"] == "NotBinary") %}
-																	<div class="card">
-																		<div class="card-header">
-																				<h4> WOE and IV </h4>
-																			</div>
-																		<br> 
-																		<h5> Target Variable is not Binary </h5>
-																	</div>
-																	{% else %}
-																		<div class = "card">
-																			<div class="card-header">
-																				<h4> WOE and IV </h4>
-																			</div>
-																			<div class = "card-body">
-																				<div class="table-responsive">
-																					<table class="table card-table table-striped table-vcenter">
-																					<thead>
-																						<tr>
-																							<th> Category </th>
-																							<th> Weight Of Evidence </th>
-																						</tr>
-												  
-																					</thead>
-																					  <tbody>
-																					  {% for category,value in entry["WOE"].items() %}
-																						 <tr>
-																							<td>{{category}}</td>
-																							<td>{{ value|round(2) }}</td>
-																						 </tr>
-																						 {% endfor %}
-																						 <tr>
-																							<td><div class="h5">Information Value</div></td>
-																							<td><div class="h5">
-																								<article id="insight">
-																									<div class="insight">
-																									{% if entry["IV"] >= 0.1 %}
-																									  <a class="h4 m-0 text-success" href="#"><u>{{ entry["IV"]|round(2) }}</u></a>
-																									  <div class="text-success"
-																										<p>{{entry['IVInsight']}}</p>
-																									  </div>
-																									{% else %}
-																										<a class="h4 m-0 text-danger" href="#"><u>{{ entry["IV"]|round(2) }}</u></a>
-																									  <div class="text-danger"
-																										<p>{{entry['IVInsight']}}</p>
-																									  </div>
-																									{% endif %}
-																									</div>
-																									</article>
-																							</div></td>
-																							<td></td>
-																						 </tr>
-																					  </tbody>
-																				   </table>
+																<td>
+																	<div class="row">
+																		<div class="card col-md-8">
+																		   <div class="card-body text-center">
+																		   
+																				{% if (entry["IVInsight"] == "NotBinary") %}
+																				<div class="card">
+																					<div class="card-header">
+																							<h4> WOE and IV </h4>
+																						</div>
+																					<br> 
+																					<h5> Target Variable is not Binary </h5>
 																				</div>
+																				{% else %}
+																					<div class = "card">
+																						<div class="card-header">
+																							<h4> WOE and IV </h4>
+																						</div>
+																						<div class = "card-body">
+																							<div class="table-responsive">
+																								<table class="table card-table table-striped table-vcenter">
+																								<thead>
+																									<tr>
+																										<th> Category </th>
+																										<th> Weight Of Evidence </th>
+																									</tr>
+															  
+																								</thead>
+																								  <tbody>
+																								  {% for category,value in entry["WOE"].items() %}
+																									 <tr>
+																										<td>{{category}}</td>
+																										<td>{{ value|round(2) }}</td>
+																									 </tr>
+																									 {% endfor %}
+																									 <tr>
+																										<td><div class="h5">Information Value</div></td>
+																										<td><div class="h5">
+																											<article id="insight">
+																												<div class="insight">
+																												{% if entry["IV"] >= 0.1 %}
+																												  <a class="h4 m-0 text-success" href="#"><u>{{ entry["IV"]|round(2) }}</u></a>
+																												  <div class="text-success"
+																													<p>{{entry['IVInsight']}}</p>
+																												  </div>
+																												{% else %}
+																													<a class="h4 m-0 text-danger" href="#"><u>{{ entry["IV"]|round(2) }}</u></a>
+																												  <div class="text-danger"
+																													<p>{{entry['IVInsight']}}</p>
+																												  </div>
+																												{% endif %}
+																												</div>
+																												</article>
+																										</div></td>
+																										<td></td>
+																									 </tr>
+																								  </tbody>
+																							   </table>
+																							</div>
+																						</div>
+																					</div>
+																				{% endif %}
 																			</div>
 																		</div>
-																	{% endif %}
-																</td>
-																<td colspan="2">
-																	<div class="card">
-																		<div class="card-header">
-																			<h4> ChiSquare </h4>
-																		</div>
-																		<div class="card-body text-center">
-																			<div class="h4"><u>Chi Value</u></div>
-																			<div class="h5">{{entry["ChiSq"]|round(2)}}</div>
-																		</div>
-																		<div class="card-body text-center">
-																			<div class="h4"><u>p-Value</u></div>
-																			<div class="h5 mb-4">
-																				<article id="insight">
-																					<div class="insight">
-																					{% if entry["PValue"] >= 0.1 %}
-																					  <a class="h4 m-0 text-success" href="#"><u>{{entry["PValue"]}}</u></a>
-																					  <div class="text-success"
-																						<p>{{entry['ChiSqInsight']}}</p>
-																					  </div>
-																					{% else %}
-																						<a class="h4 m-0 text-danger" href="#"><u>{{entry["PValue"]}}</u></a>
-																					  <div class="text-danger"
-																						<p>{{entry['ChiSqInsight']}}</p>
-																					  </div>
-																					{% endif %}
+																<!-- </td>
+																<td> -->
+																		<div class="card col-md-4">
+																		   <div class="card-body text-center">
+																				<div class="card">
+																					<div class="card-header">
+																						<h4> ChiSquare </h4>
 																					</div>
-																					</article>
-																			
+																					<div class="card-body text-center">
+																						<div class="h4"><u>Chi Value</u></div>
+																						<div class="h5">{{entry["ChiSq"]|round(2)}}</div>
+																					</div>
+																					<div class="card-body text-center">
+																						<div class="h4"><u>p-Value</u></div>
+																						<div class="h5 mb-4">
+																							<article id="insight">
+																								<div class="insight">
+																								{% if entry["PValue"] <= 0.05 %}
+																								  <a class="h4 m-0 text-success" href="#"><u>{{entry["PValue"]|round(5)}}</u></a>
+																								  <div class="text-success"
+																									<p>{{entry['ChiSqInsight']}}</p>
+																								  </div>
+																								{% else %}
+																									<a class="h4 m-0 text-danger" href="#"><u>{{entry["PValue"]}}</u></a>
+																								  <div class="text-danger"
+																									<p>{{entry['ChiSqInsight']}}</p>
+																								  </div>
+																								{% endif %}
+																								</div>
+																								</article>
+																						
+																						</div>
+																					</div>
+																				</div>
 																			</div>
 																		</div>
 																	</div>
