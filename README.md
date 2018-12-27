@@ -32,19 +32,19 @@ eda.EDAToHTML()
 <p>
 <img src='/ExploriPy/doc_images/Continuous.png'>
 
-**Correlation Heatmap**
+
 <p>
 <img src='/ExploriPy/doc_images/Correlation Heatmap.PNG'>
   
-**Scatter Plot**
+
 <p>
 <img src='/ExploriPy/doc_images/Scatter Plot.PNG'>
 
-**Feature Reduction**
+
 <p>
 <img src='/ExploriPy/doc_images/Feature Reduction.PNG'>
 
-**Categorical Variables**
+
 <p>
 <img src='/ExploriPy/doc_images/Categorical.PNG'>
   
