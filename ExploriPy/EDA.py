@@ -284,8 +284,6 @@ class EDA:
 					else:
 						ChiSqInsight2 = ChiSqInsight.format(DependentVar, "independent from", IndependentVar)
 					
-					
-					print("DependentVar = "+DependentVar+" IndependentVar = " + IndependentVar + " ChiSq = " + str(ChiSq) + " PValue = " + str(PValue) + " ChiSqInsight = " + ChiSqInsight2)
 					# Add to the dictionary
 					item = dict(DependentVar = DependentVar, IndependentVar = IndependentVar, WOE = WOE, IV = round(IV,2),
 								IVInsight=IVInsight, ChiSq = ChiSq, PValue = PValue, ChiSqInsight = ChiSqInsight2)
@@ -305,24 +303,8 @@ class EDA:
 		end = time.time()
 		if self.debug == 'YES':
 			print('WOEList',end-start)	
-		#print(WOEList)	
+			
 		return WOEList,pd.DataFrame(SummaryWOEList)
-	
-	# def UpdateChiSq(self,WOEList,DependentVar, IndependentVar, ChiSq, PValue, ChiSqInsight):
-		# start = time.time()
-		# for entry in WOEList:
-			# if entry['DependentVar'] == DependentVar and entry['IndependentVar'] == IndependentVar and entry['ChiSq'] == 0:
-				# entry['ChiSq'] = ChiSq
-				# entry['PValue'] = PValue
-				# entry['ChiSqInsight'] = ChiSqInsight
-			# if entry['DependentVar'] == IndependentVar and entry['IndependentVar'] == DependentVar and entry['ChiSq'] == 0:
-				# entry['ChiSq'] = ChiSq
-				# entry['PValue'] = PValue
-				# entry['ChiSqInsight'] = ChiSqInsight
-		# end = time.time()
-		# if self.debug == 'YES':
-			# print('UpdateChiSq',end-start)
-		# return WOEList
 		
 	def ChiSquareOfDFCols(self, c1, c2):
 		start = time.time()
@@ -485,8 +467,6 @@ class EDA:
 			Binary = 'Yes' if CategoricalVar in self.BinaryCategoricalFeatures else 'No'
 			for ContinuousVar in self.ContinuousFeatures:
 				TukeyResult = None 
-				#f,p = stats.f_oneway(*[list(self.df[self.df[CategoricalVar]==name][ContinuousVar]) for name in set(self.df[CategoricalVar])])
-				#f,p = stats.f_oneway(*[list(self.df[self.df[CategoricalVar]==name][ContinuousVar].dropna() for name in set(self.df[CategoricalVar]))])
 				f,p = stats.f_oneway(*[list(temp_df[temp_df[CategoricalVar]==name][ContinuousVar]) for name in set(temp_df[CategoricalVar])])
 				if (p<0.05 and CategoricalVar in self.BinaryCategoricalFeatures):
 					Insight = Insight1.format(ContinuousVar, CategoricalVar) + Insight2.format(CategoricalVar)
