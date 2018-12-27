@@ -1,0 +1,2 @@
+include ./ExploriPy/data/*
+recursive-include ./ExploriPy/HTMLTemplate/dist *
