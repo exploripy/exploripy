@@ -24,11 +24,11 @@ eda.EDAToHTML()
 
 **Output**
 
-**Null Values**
+
 <p>
 <img src='/ExploriPy/doc_images/Null.PNG'>
 
-**Continuous Variables**
+
 <p>
 <img src='/ExploriPy/doc_images/Continuous.png'>
 
