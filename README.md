@@ -24,6 +24,36 @@ eda.EDAToHTML()
 
 **Output**
 
+**Null Values**
+<p>
+<img src='/ExploriPy/doc_images/Null.PNG'>
+
+**Continuous Variables**
+<p>
+<img src='/ExploriPy/doc_images/Continuous.png'>
+
+**Correlation Heatmap**
+<p>
+<img src='/ExploriPy/doc_images/Correlation Heatmap.PNG'>
+  
+**Scatter Plot**
+<p>
+<img src='/ExploriPy/doc_images/Scatter Plot.PNG'>
+
+**Feature Reduction**
+<p>
+<img src='/ExploriPy/doc_images/Feature Reduction.PNG'>
+
 **Categorical Variables**
 <p>
 <img src='/ExploriPy/doc_images/Categorical.PNG'>
+  
+**Categorical Vs Categorical**
+<p>
+Weight Of Evidence, Information Value, Chi-Sq Test of Independence
+<img src='/ExploriPy/doc_images/WOE IV ChiSq.png'>
+
+**Categorical Vs Continuous**
+<p>
+ANOVA and PostHoc Test (Tukey HSD)
+<img src='/ExploriPy/doc_images/Anova TukeyHSD.png'>
