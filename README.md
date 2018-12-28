@@ -4,7 +4,7 @@ Pre-Modelling Analysis of the data, by doing various exploratory data analysis a
 **Installation Steps**
 
 ```  
-pip install exploripy
+pip install git+https://github.com/Vibish/exploripy
 ``` 
 
 **Important Parameters**
