@@ -1,5 +1,5 @@
 # ExploriPy
-Pre-Modelling Analysis of the data, by doing various exploratory data analysis and Statistical Test.
+Pre-Modelling Analysis of the data, by doing various exploratory data analyses and Statistical Tests.
 
 **Installation Steps**
 
