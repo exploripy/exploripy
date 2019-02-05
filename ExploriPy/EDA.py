@@ -15,11 +15,12 @@ from statsmodels.stats.multicomp import MultiComparison
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 from sklearn.base import BaseEstimator, TransformerMixin
 from statsmodels.stats.outliers_influence import variance_inflation_factor
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from scipy.stats import kurtosis
 from scipy.stats import skew
 import time
 import os
+from sklearn.metrics import auc
 
 
 class EDA: 
@@ -119,7 +120,7 @@ class EDA:
 		else:
 			TTest = pd.DataFrame()
 			TTestDifferent = pd.DataFrame()
-			TTestNotDifferent = pd.DataFrame()		
+			TTestNotDifferent = pd.DataFrame()
 		
 			
 		if(out):
@@ -151,6 +152,7 @@ class EDA:
 					   ,TTestDifferent = TTestDifferent
 					   ,TTestNotDifferent = TTestNotDifferent
 					   ,VIF_columns = self.VIF()
+					   #,AUC_columns = self.AreaUnderCurve()
 					   ,Variance = self.std_variance()
 					   ,NullValue = pd.DataFrame(round((self.df.isnull().sum()/self.df.shape[0])*100)).reset_index().rename(columns={'index': 'Feature',0:'NullPercentage'})
 					   ,ScatterImage = self.ScatterPlot()
@@ -321,7 +323,7 @@ class EDA:
 		df = df.describe().transpose()
 		VariableDetails = []
 		for key,value in df.iterrows():
-			Edges, Hist, HistValues, PDF, Color1, Color2 = self.HistChart(key)
+			Edges, EdgesValues, Hist, HistValues, PDF, Color1, Color2 = self.HistChart(key)
 			VariableDetails.append(dict(Name = key
 								,Count = value['count']
 								,Mean = value['mean']
@@ -336,6 +338,7 @@ class EDA:
 								,Hist = Hist
 								,HistValues = HistValues
 								,Edges = Edges
+								,EdgesValues = EdgesValues
 								,PDF = PDF
 								,Color1 = Color1
 								,Color2 = Color2
@@ -387,8 +390,8 @@ class EDA:
 	def HistChart (self, var):
 		start = time.time()
 		h = list(self.df[var].dropna())
-		hist, edges = np.histogram(h, density=True, bins=50)
-		histValues, edgesValues = np.histogram(h, density=False, bins=50)
+		hist, edges = np.histogram(h, density=True, bins=35)
+		histValues, edgesValues = np.histogram(h, density=False, bins=35)
 		h.sort()
 		hmean = np.mean(h)
 		hstd = np.std(h)
@@ -397,13 +400,14 @@ class EDA:
 		hist = ','.join([str(round(x,5)) for x in hist])
 		histValues = ','.join([str(x) for x in histValues])
 		edges = ','.join([str(x) for x in edges])
+		edgesValues = ','.join([str(x) for x in edgesValues])
 		pdf = ','.join([str(round(x,5)) for x in pdf])
 		indices = random.sample(range(len(self.SelectedColors)), 2)
 		colors=[self.SelectedColors[i] for i in sorted(indices)]
 		end = time.time()
 		if self.debug == 'YES':
 			print('HistChart',end-start)
-		return edges, hist, histValues, pdf, colors[0], colors[1]
+		return edges,edgesValues, hist, histValues, pdf, colors[0], colors[1]
 		
 	def CorrList (self):
 		start = time.time()
@@ -532,12 +536,41 @@ class EDA:
 		start = time.time()
 		vif_list = []
 		X = self.df[self.ContinuousFeatures].dropna()
-		for var in X.columns:
-			vif = variance_inflation_factor(X[X.columns].values,X.columns.get_loc(var))
-			vif_list.append(dict(column=var,vif=vif))
+		if len(list(self.ContinuousFeatures)) > 1:
+			for var in X.columns:
+				vif = variance_inflation_factor(X[X.columns].values,X.columns.get_loc(var))
+				vif_list.append(dict(column=var,vif=vif))
 			
 		end = time.time()
 		if self.debug == 'YES':
 			print('VIF',end-start)
 		return pd.DataFrame(vif_list)
 	
+	def AreaUnderCurve(self):
+		"""
+		Get the area under curve, if each scaled features are plotted against each other
+		"""
+		start = time.time()
+		temp_df = self.df.copy()
+		AUC_list = []
+		le = LabelEncoder()
+		scaler = MinMaxScaler()
+		for feature in self.CategoricalFeatures:
+			temp_df[feature] = le.fit_transform(pd.DataFrame(temp_df[feature]))
+		
+		cols_for_auc = self.CategoricalFeatures
+		cols_for_auc.extend(self.ContinuousFeatures)
+		for feature in cols_for_auc:
+			temp_df[feature] = scaler.fit_transform(pd.DataFrame(temp_df[feature]))
+			for feature_2 in cols_for_auc:
+				if feature != feature_2:
+					area_under_curve = auc(temp_df[feature],temp_df[feature_2],reorder=True)
+					AUC_list.append(dict(dependent = feature, independent = feature_2, auc=area_under_curve))
+					
+		if self.debug == 'YES':
+			print('AUC',end-start)		
+			
+		return pd.DataFrame(AUC_list)
+		
+		
+			

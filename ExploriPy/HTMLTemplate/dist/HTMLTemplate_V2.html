@@ -452,6 +452,54 @@
 	  </script>
 	  {% endfor %}
 	  
+	  
+	  {% for var in ContinuousSummary %}
+	  
+      <script>
+		require(['c3', 'jquery'], function(c3, $) {
+		$(document).ready(function(){
+			var chart = c3.generate({
+				bindto: '#{{var['Name']}}HistChartActual',
+				data: {
+					columns: [
+						// each columns data
+						['data1', {{ var['HistValues']  }}]						
+					],
+					type: 'bar', // default type of chart
+					
+					colors: {
+						'data1': "{{var['Color2']}}"
+					},
+					names: {
+						// name of each series
+						'data1': '{{var['Name']}}'
+					}
+				},
+				axis: {
+					x: {
+						type: 'category',
+						// name of each category
+						categories: [{{ var['Edges'] }}]
+					},
+				},
+				bar: {
+					width: 	7
+				},
+				legend: {
+					  show: false, //hide legend
+				},
+				padding: {
+					bottom: 0,
+					top: 0
+				},
+			});
+		});
+	  });
+	  </script>
+	  {% endfor %}
+	  
+	  
+	  
    </head>
    <body class="">
       <div class="page">
@@ -721,6 +769,11 @@
 											  <div id="{{ var['Name'] }}HistChart" ></div>
 										   </div>
 									   </div>
+									   <div class = "row">
+										   <div class="embed-wrapper">
+											  <div id="{{ var['Name'] }}HistChartActual" ></div>
+										   </div>
+									   </div>
 									</div>
 								</div>
 							</div>
@@ -841,6 +894,8 @@
 											   </div>
 											</div>
 										 </div>
+										 
+										 <!-- Place holder for AUC -->
 										 
 									 </div>
 									 
@@ -1344,7 +1399,7 @@
 																<button onclick="exportTableToCSV('AnovaNonInfluencing')">CSV</button>
 															  </div>
 															  <div class="text-left">													 
-																	<table class="table table-striped" id="IVStrongPredictors">
+																	<table class="table table-striped" id="AnovaNonInfluencing">
 																	  <thead>
 																		 <tr>
 																			<th>Target</th>
