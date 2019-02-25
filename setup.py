@@ -23,7 +23,8 @@ setup(name='ExploriPy',
           'seaborn',
           'matplotlib',
           'statsmodels',
-          'sklearn'
+          'sklearn',
+		  'tqdm'
       ],
       include_package_data=True,
       zip_safe=False)

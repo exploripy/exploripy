@@ -3,6 +3,8 @@ import numpy as np
 import io
 from ExploriPy import FeatureType
 from ExploriPy import WOE_IV
+from ExploriPy import TargetAnalysisCategorical
+from ExploriPy import TargetAnalysisContinuous
 from jinja2 import Template
 from jinja2 import Environment, FileSystemLoader
 import random
@@ -21,6 +23,7 @@ from scipy.stats import skew
 import time
 import os
 from sklearn.metrics import auc
+from tqdm import tqdm
 
 
 class EDA: 
@@ -54,23 +57,52 @@ class EDA:
 		"#798086","#6e767d","#646c74","#59626a","#4f5860","#454e57","#3a444e","#303a44","#25303b","#1b2631","#dfe2e4","#d5d8da","#cacdd1","#c0c3c7","#b5b9bd","#abafb3",
 		"#a0a5a9","#969aa0","#8b9096","#80868c","#767c82","#6b7278","#61676f","#565d65","#4c535b","#414951","#373f47","#2c343e","#222a34","#17202a"]
 		
-		featureType = FeatureType.FeatureType(df,CategoricalFeatures)
+		start1 = time.time()
+		featureType = FeatureType.FeatureType(df,CategoricalFeatures)		
+		
 		self.CategoricalFeatures = featureType.CategoricalFeatures()
 		self.NonCategoricalFeatures = featureType.NonCategoricalFeatures()
 		self.ContinuousFeatures = featureType.ContinuousFeatures()
 		self.OtherFeatures = featureType.OtherFeatures()
 		self.BinaryCategoricalFeatures = featureType.BinaryCategoricalFeatures()
 		self.NonBinaryCategoricalFeatures = featureType.NonBinaryCategoricalFeatures()
+		
+		end1 = time.time()
+		# print("Time to get the feature types = ",end1-start1)
+		
 		self.filename = filename
 		self.VIF_threshold = VIF_threshold
 		self.debug = debug
 		self.title = title 
 		
 		# change the datatypes to str for all the categorical variables
-		for feature in self.CategoricalFeatures:
-			self.df[feature] = self.df[feature].astype(str)
-			self.df[feature] = np.where(self.df[feature]=='nan',np.NaN,self.df[feature])
+		print("Converting Categorical Features to String...")
+		for feature in tqdm(self.CategoricalFeatures):
+			if self.df[feature].dtype == np.number:
+				self.df[feature] = np.where(pd.isnull(self.df[feature]),df[feature],df[feature].astype(str))
+			
+			# self.df[feature] = self.df[feature].astype(str)
+			# self.df[feature] = np.where(self.df[feature]=='nan',np.NaN,self.df[feature])
 	
+	def TargetAnalysis(self,target):
+		'''
+		Target Specific Analysis
+		'''
+		print("Initiating Target Specific Analysis...")
+		start = time.time()
+		target = target.replace(" ", "_")
+		target = target.replace("(", "_")
+		target = target.replace(")", "_")
+		if target in self.CategoricalFeatures:
+			targetAnalysis = TargetAnalysisCategorical.TargetAnalysisCategorical(self.df, self.CategoricalFeatures, self.ContinuousFeatures, self.OtherFeatures, target, self.title)
+		elif target in self.ContinuousFeatures:
+			targetAnalysis = TargetAnalysisContinuous.TargetAnalysisContinuous(self.df, self.CategoricalFeatures, self.ContinuousFeatures, self.OtherFeatures, target, self.title)
+		end = time.time()
+		# print("Time to initialize TargetAnalysis = ",end-start)
+		targetAnalysis.TargetSpecificAnalysis()
+		
+		
+		return
 
 	def EDAToHTML(self,out=None):
 		'''
