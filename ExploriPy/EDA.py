@@ -27,7 +27,7 @@ from tqdm import tqdm
 
 
 class EDA: 
-	def __init__(self,df,CategoricalFeatures=[],filename="index.html",VIF_threshold=5,debug='NO',title='Exploratory Data Analysis'):
+	def __init__(self,df,CategoricalFeatures=[],OtherFeatures=[],filename="index.html",VIF_threshold=5,debug='NO',title='Exploratory Data Analysis'):
 		''' 
 		Constructor for this class. 
 		'''
@@ -58,7 +58,7 @@ class EDA:
 		"#a0a5a9","#969aa0","#8b9096","#80868c","#767c82","#6b7278","#61676f","#565d65","#4c535b","#414951","#373f47","#2c343e","#222a34","#17202a"]
 		
 		start1 = time.time()
-		featureType = FeatureType.FeatureType(df,CategoricalFeatures)		
+		featureType = FeatureType.FeatureType(df,CategoricalFeatures,OtherFeatures)		
 		
 		self.CategoricalFeatures = featureType.CategoricalFeatures()
 		self.NonCategoricalFeatures = featureType.NonCategoricalFeatures()
@@ -79,7 +79,7 @@ class EDA:
 		print("Converting Categorical Features to String...")
 		for feature in tqdm(self.CategoricalFeatures):
 			if self.df[feature].dtype == np.number:
-				self.df[feature] = np.where(pd.isnull(self.df[feature]),df[feature],df[feature].astype(str))
+				self.df[feature] = np.where(pd.isnull(self.df[feature]),self.df[feature],self.df[feature].astype(str))
 			
 			# self.df[feature] = self.df[feature].astype(str)
 			# self.df[feature] = np.where(self.df[feature]=='nan',np.NaN,self.df[feature])

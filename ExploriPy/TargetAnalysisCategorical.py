@@ -124,6 +124,8 @@ class TargetAnalysisCategorical:
 		df = self.df[var].groupby(self.df[var]).agg(['count'])
 		df.index.names = ['Name']
 		df.columns = ['Value']
+		df.sort_values(['Value'], ascending = False, inplace=True)
+		df = df.head(30)
 		
 		if df.shape[0] > len(self.SelectedColors):
 			if df.shape[0] > len(self.AllColors):
@@ -183,10 +185,21 @@ class TargetAnalysisCategorical:
 					if PValue <= 0.05:
 						chi_list.append(dict(IndependentVar = IndependentVar, ChiSq = ChiSq, PValue = PValue))
 			d1 = pd.DataFrame(chi_list)
-			d1.sort_values(['PValue'],ascending=[True],inplace=True)
+			if d1.shape[0]>1:
+				d1.sort_values(['PValue'],ascending=[True],inplace=True)
 		
 		return d1
 					
+	def getRandomColors(self,no_of_colors):
+		'''
+		Generate Random Colors
+		'''
+		colors = []
+		for i in range(0,no_of_colors):
+			color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+			colors.append('#%02x%02x%02x' % color)
+		
+		return colors
 		
 	def ChiSquareOfDFCols(self, c1, c2):
 		groupsizes = self.df.groupby([c1, c2]).size()
@@ -283,8 +296,9 @@ class TargetAnalysisCategorical:
 			f,p = stats.f_oneway(*[list(temp_df[temp_df[target]==name][ContinuousVar]) for name in set(temp_df[target])])
 			AnovaList.append(dict(Continuous = ContinuousVar, PValue = p))
 		Anova_df = pd.DataFrame(AnovaList)
-		Anova_df = Anova_df[Anova_df['PValue']<=0.05]
-		Anova_df.sort_values(['PValue'],ascending = True, inplace=True)
+		if Anova_df.shape[0]>0:
+			Anova_df = Anova_df[Anova_df['PValue']<=0.05]
+			Anova_df.sort_values(['PValue'],ascending = True, inplace=True)
 		
 		return Anova_df
 		
@@ -303,7 +317,7 @@ class TargetAnalysisCategorical:
 				# i=i+1
 			GroupTukeyHSD_df = self.GroupTukeyHSD(self.df[column],self.df[self.target].astype(str))
 			tukey_histogram_list = self.TukeyHistogram(GroupTukeyHSD_df, self.target, column)
-			edges,edgesValues, hist, histValues, pdf, color1, color2 = self.HistChart(list(self.df[column]))
+			edges,edgesValues, hist, histValues, pdf, color1, color2 = self.HistChart(list(self.df[column].dropna()))
 			hist_list.append(dict(category = column, edges = edges,edgesValues = edgesValues, hist = hist, histValues = histValues, pdf = pdf, color1 = color1, color2 = color2))
 			boxPlotFileName = self.BoxPlot(column)
 				
@@ -403,7 +417,7 @@ class TargetAnalysisCategorical:
 			df = self.df[[CategoricalFeature,ContinuousFeature]]
 			df[CategoricalFeature] = df[CategoricalFeature].astype(str)
 			df = df.merge(cat_list, left_on=CategoricalFeature, right_on='category', how='inner')			
-			edges,edgesValues, hist, histValues, pdf, color1, color2 = self.HistChart(list(df[ContinuousFeature]))
+			edges,edgesValues, hist, histValues, pdf, color1, color2 = self.HistChart(list(df[ContinuousFeature].dropna()))
 			tukey_histogram_list.append(dict(category = cat_name, edges = edges,edgesValues = edgesValues, hist = hist, histValues = histValues, pdf = pdf, color1 = self.SelectedColors[i], color2 = color2))
 			i = i+1
 			

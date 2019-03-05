@@ -13,6 +13,9 @@ from scipy.stats import skew
 import matplotlib.pyplot as plt
 import seaborn as sns
 from statsmodels.stats.multicomp import MultiComparison
+import statsmodels
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
 
 class TargetAnalysisContinuous: 
 	def __init__(self, df, CategoricalFeatures, ContinuousFeatures, OtherFeatures, target, title):
@@ -87,6 +90,7 @@ class TargetAnalysisContinuous:
 							,CategoricalFeatures = self.CategoricalFeatures
 							,OtherFeatures = self.OtherFeatures
 							,ContinuousFeatures = self.ContinuousFeatures
+							#,SummarizeTwoWayAnova_list = self.SummarizeTwoWayAnova()
 					   )
 			
 		out_filename = os.path.join(this_dir, 'HTMLTemplate\\dist\\result.html')
@@ -223,8 +227,9 @@ class TargetAnalysisContinuous:
 			f,p = stats.f_oneway(*[list(temp_df[temp_df[CategoricalVar]==name][target]) for name in set(temp_df[CategoricalVar])])
 			AnovaList.append(dict(Categorical = CategoricalVar, PValue = p))
 		Anova_df = pd.DataFrame(AnovaList)
-		Anova_df = Anova_df[Anova_df['PValue']<=0.05]
-		Anova_df.sort_values(['PValue'],ascending = True, inplace=True)
+		if Anova_df.shape[0]>0:
+			Anova_df = Anova_df[Anova_df['PValue']<=0.05]
+			Anova_df.sort_values(['PValue'],ascending = True, inplace=True)
 		
 		return Anova_df
 		
@@ -266,6 +271,8 @@ class TargetAnalysisContinuous:
 		df = self.df[var].groupby(self.df[var]).agg(['count'])
 		df.index.names = ['Name']
 		df.columns = ['Value']
+		df.sort_values(['Value'], ascending = False, inplace=True)
+		df = df.head(30)
 		
 		if df.shape[0] > len(self.SelectedColors):
 			if df.shape[0] > len(self.AllColors):
@@ -280,6 +287,17 @@ class TargetAnalysisContinuous:
 		# CategoriesCount.append(dict(Count = df))
 		
 		return df
+		
+	def getRandomColors(self,no_of_colors):
+		'''
+		Generate Random Colors
+		'''
+		colors = []
+		for i in range(0,no_of_colors):
+			color = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+			colors.append('#%02x%02x%02x' % color)
+		
+		return colors 
 		
 	def TargetNullDistribution(self,feature):
 		'''
@@ -337,15 +355,15 @@ class TargetAnalysisContinuous:
 			#             temp_list.extend((temp_result['Group 2'].unique()))
 			#         else:
 			#             temp_list.append((temp_result['Group 2'].unique()[0]))
-					same_distribution_list.append(dict(list_name=group1, lists=temp_list, length=len(temp_list)))
+					same_distribution_list.append(dict(list_name=group1.replace(" ", "_"), lists=temp_list, length=len(temp_list)))
 			if len(set(categorical.unique())-set(overall_distribution_list)) >0:
 				missing_categories = list(set(categorical.unique())-set(overall_distribution_list))
 				for group1 in missing_categories:
-					same_distribution_list.append(dict(list_name=group1, lists=[group1], length=1))
+					same_distribution_list.append(dict(list_name=group1.replace(" ", "_"), lists=[group1], length=1))
 
 		else:
 			for group1 in categorical.unique():
-				same_distribution_list.append(dict(list_name=group1, lists=[group1], length=1))
+				same_distribution_list.append(dict(list_name=group1.replace(" ", "_"), lists=[group1], length=1))
 		
 		g1 = pd.DataFrame(same_distribution_list)
 		return (g1.sort_values('length',ascending=False))
@@ -361,7 +379,7 @@ class TargetAnalysisContinuous:
 			df = self.df[[CategoricalFeature,target]]
 			df[CategoricalFeature] = df[CategoricalFeature].astype(str)
 			df = df.merge(cat_list, left_on=CategoricalFeature, right_on='category', how='inner')			
-			edges,edgesValues, hist, histValues, pdf, color1, color2 = self.HistChart(list(df[target]))
+			edges,edgesValues, hist, histValues, pdf, color1, color2 = self.HistChart(list(df[target].dropna()))
 			tukey_histogram_list.append(dict(category = cat_name, edges = edges,edgesValues = edgesValues, hist = hist, histValues = histValues, pdf = pdf, color1 = self.SelectedColors[i], color2 = color2))
 			i = i+1
 			
@@ -397,7 +415,7 @@ class TargetAnalysisContinuous:
 				hist_list = []
 				# Get the stats on the Continuous Variable
 				g1 = pd.DataFrame(self.df[column].describe())						
-				edges,edgesValues, hist, histValues, pdf, color1, color2 = self.HistChart(list(self.df[column]))
+				edges,edgesValues, hist, histValues, pdf, color1, color2 = self.HistChart(list(self.df[column].dropna()))
 				hist_list.append(dict(category = column, edges = edges,edgesValues = edgesValues, hist = hist, histValues = histValues, pdf = pdf, color1 = color1, color2 = color2))
 				boxPlotFileName = self.BoxPlot(column)
 				regPlotFileName = self.RegPlot(column,self.target)
@@ -417,6 +435,7 @@ class TargetAnalysisContinuous:
 																skew = skew(self.df[column]),
 																boxPlotFileName = boxPlotFileName,
 																regPlotFileName = regPlotFileName
+																
 																))
 			
 		return pd.DataFrame(ContinuousFeaturesHistChart_list)
@@ -442,3 +461,23 @@ class TargetAnalysisContinuous:
 			CorrList = []
 		
 		return corr_df, MasterList, ','.join("'{0}'".format(x) for x in CorrDf.columns)
+	
+	def SummarizeTwoWayAnova(self):
+		SummarizeTwoWayAnova_list = []
+		print('Performing two-way ANOVA...')
+		for i in tqdm(range(len(self.CategoricalFeatures) - 1)):
+			for j in range(i+1,len(self.CategoricalFeatures)):
+				if self.TwoWayAnova(self.CategoricalFeatures[i],self.CategoricalFeatures[j],self.target):
+					SummarizeTwoWayAnova_list.append(dict(categorical1 = self.CategoricalFeatures[i],categorical2=self.CategoricalFeatures[j])) 
+			
+		return SummarizeTwoWayAnova_list
+		
+	def TwoWayAnova(self,categorical1, categorical2, continuous):
+		df = self.df[[categorical1,categorical2,continuous]]
+		df = df.dropna()
+		
+		function = continuous + ' ~ C(' + categorical1 + ')*C('+ categorical2 + ')' 
+		print(function)
+		lm = ols(function, data=df).fit(method='powell')
+		table = sm.stats.anova_lm(lm, typ=3)
+		return table.iloc[2]['PR(>F)']<0.05
