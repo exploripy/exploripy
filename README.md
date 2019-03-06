@@ -1,7 +1,10 @@
 # ExploriPy
 Pre-Modelling Analysis of the data, by doing various exploratory data analyses and Statistical Tests.
 
-**Installation Steps**
+[Installation Steps](#installation-steps)
+
+
+#### Installation Steps
 
 ```  
 pip install ExploriPy
