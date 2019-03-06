@@ -1,6 +1,6 @@
 #Test the package
 
-from dominance_analysis.dominance import *
+from ExploriPy import EDA
 
 def test_package_function():
-	return "Dominance Analysis Package"
+	return "ExploriPy"
