@@ -1,5 +1,5 @@
 # ExploriPy
-[![PyPI version](https://badge.fury.io/py/exploripy.svg)](https://badge.fury.io/py/exploripy)
+[![PyPI version](https://badge.fury.io/py/ExploriPy.svg)](https://badge.fury.io/py/exploripy)
 [![Downloads](https://pepy.tech/badge/dominance-analysis)](https://pepy.tech/project/dominance-analysis) 
 <a href="https://github.com/bhagatsajan0073/dominance_analysis/blob/master/LICENSE">
   <img src="https://img.shields.io/github/license/bhagatsajan0073/dominance_analysis.svg">
