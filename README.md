@@ -7,7 +7,7 @@
 <a href="https://github.com/Vibish/exploripy/stargazers">
   <img src="https://img.shields.io/github/stars/Vibish/exploripy.svg">
 </a>
-<a href="https://github.com/bhagatsajan0073/dominance_analysis/network/members">
+<a href="https://github.com/Vibish/exploripy/network/members">
   <img src="https://img.shields.io/github/forks/bhagatsajan0073/dominance_analysis.svg">
 </a>
 [![Build Status](https://travis-ci.org/bhagatsajan0073/dominance-analysis.svg?branch=master)](https://travis-ci.org/bhagatsajan0073/dominance-analysis)
