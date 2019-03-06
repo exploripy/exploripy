@@ -19,7 +19,8 @@ from ExploriPy import EDA
 df = pd.read_csv('LoanPrediction.csv',na_values = 'nan')
 CategoricalFeatures = ['Gender','Married','Dependents','Education','Self_Employed','Credit_History','Property_Area','Loan_Status','Loan_Amount_Term']
 eda = EDA(df,CategoricalFeatures,title='Data Analysis on a Public Data')
-eda.EDAToHTML()
+eda.TargetAnalysis('Loan_Status') # For Target Specific Analysis
+# eda.EDAToHTML() # For general analysis
 ```
 
 **Output**
