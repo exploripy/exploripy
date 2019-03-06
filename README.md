@@ -1,7 +1,7 @@
 # ExploriPy
 Pre-Modelling Analysis of the data, by doing various exploratory data analyses and Statistical Tests.
 
-[Installation Steps](#installation-steps)
+[Installation Steps](#installation-steps) </br>
 [Usage](#usage)
 [Parameters](#parameters)
 [Output](#output)
