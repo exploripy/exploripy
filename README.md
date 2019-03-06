@@ -2,7 +2,10 @@
 Pre-Modelling Analysis of the data, by doing various exploratory data analyses and Statistical Tests.
 
 [Installation Steps](#installation-steps)
-
+[Usage](#usage)
+[Parameters](#parameters)
+[Output](#output)
+    [List of Features](#
 
 #### Installation Steps
 
