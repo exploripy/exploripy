@@ -16,6 +16,8 @@ from statsmodels.stats.multicomp import MultiComparison
 import statsmodels
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
+import warnings
+warnings.filterwarnings('ignore')
 
 class TargetAnalysisContinuous: 
 	def __init__(self, df, CategoricalFeatures, ContinuousFeatures, OtherFeatures, target, title):
@@ -65,7 +67,7 @@ class TargetAnalysisContinuous:
 		this_dir, this_filename = os.path.split(__file__)
 		
 		Template_PATH = os.path.join(this_dir, filename)
-
+		
 		with open(Template_PATH) as file:
 			template = Template(file.read())			
 

@@ -977,12 +977,18 @@
 																<h4> <c> Categories with Similar Distributions </c> </h4>
 																{% for key, row in row['GroupTukeyHSD_df'].iterrows() %}
 																	<div class="col-sm-4">
-																		<table class="table table-striped table-bordered text-wrap">	
-																			  
+																		<table style="table-layout: fixed; width: 100%" class="table table-striped table-bordered text-wrap" id="{{ row['list_name'] }}_categories">	  
+																					<thead>
+																						<tr>
+																						   <th style="word-wrap: break-word">Dist- {{ row['list_name'] }}
+																							<button onclick="exportTableToCSV('{{ row['list_name'] }}_categories')">CSV</button>
+																						   </th>
+																						</tr>
+																					 </thead>	
 																			  <tbody>
 																				{% for category in row['lists'] %}
 																					<tr>
-																					<td style="width: 146.4px;"> {{ category }} </td>
+																					<td style="width: 60px; font-size: 75%;"> {{ category }} </td>
 																					</tr>
 																				{% endfor %}
 																			  </tbody>

@@ -13,6 +13,8 @@ from scipy.stats import skew
 import matplotlib.pyplot as plt
 import seaborn as sns
 from statsmodels.stats.multicomp import MultiComparison
+import warnings
+warnings.filterwarnings('ignore')
 
 class TargetAnalysisCategorical: 
 	def __init__(self, df, CategoricalFeatures, ContinuousFeatures, OtherFeatures, target, title):
@@ -62,8 +64,7 @@ class TargetAnalysisCategorical:
 			
 		this_dir, this_filename = os.path.split(__file__)
 		
-		Template_PATH = os.path.join(this_dir, filename)
-		
+		Template_PATH = os.path.join(this_dir, filename)		
 		
 
 		with open(Template_PATH) as file:
