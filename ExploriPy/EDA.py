@@ -3,6 +3,8 @@ import numpy as np
 import io
 from ExploriPy import FeatureType
 from ExploriPy import WOE_IV
+from ExploriPy import TargetAnalysisCategorical
+from ExploriPy import TargetAnalysisContinuous
 from jinja2 import Template
 from jinja2 import Environment, FileSystemLoader
 import random
@@ -15,15 +17,17 @@ from statsmodels.stats.multicomp import MultiComparison
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 from sklearn.base import BaseEstimator, TransformerMixin
 from statsmodels.stats.outliers_influence import variance_inflation_factor
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, LabelEncoder
 from scipy.stats import kurtosis
 from scipy.stats import skew
 import time
 import os
+from sklearn.metrics import auc
+from tqdm import tqdm
 
 
 class EDA: 
-	def __init__(self,df,CategoricalFeatures=[],filename="index.html",VIF_threshold=5,debug='NO',title='Exploratory Data Analysis'):
+	def __init__(self,df,CategoricalFeatures=[],OtherFeatures=[],filename="index.html",VIF_threshold=5,debug='NO',title='Exploratory Data Analysis'):
 		''' 
 		Constructor for this class. 
 		'''
@@ -53,23 +57,52 @@ class EDA:
 		"#798086","#6e767d","#646c74","#59626a","#4f5860","#454e57","#3a444e","#303a44","#25303b","#1b2631","#dfe2e4","#d5d8da","#cacdd1","#c0c3c7","#b5b9bd","#abafb3",
 		"#a0a5a9","#969aa0","#8b9096","#80868c","#767c82","#6b7278","#61676f","#565d65","#4c535b","#414951","#373f47","#2c343e","#222a34","#17202a"]
 		
-		featureType = FeatureType.FeatureType(df,CategoricalFeatures)
+		start1 = time.time()
+		featureType = FeatureType.FeatureType(df,CategoricalFeatures,OtherFeatures)		
+		
 		self.CategoricalFeatures = featureType.CategoricalFeatures()
 		self.NonCategoricalFeatures = featureType.NonCategoricalFeatures()
 		self.ContinuousFeatures = featureType.ContinuousFeatures()
 		self.OtherFeatures = featureType.OtherFeatures()
 		self.BinaryCategoricalFeatures = featureType.BinaryCategoricalFeatures()
 		self.NonBinaryCategoricalFeatures = featureType.NonBinaryCategoricalFeatures()
+		
+		end1 = time.time()
+		# print("Time to get the feature types = ",end1-start1)
+		
 		self.filename = filename
 		self.VIF_threshold = VIF_threshold
 		self.debug = debug
 		self.title = title 
 		
 		# change the datatypes to str for all the categorical variables
-		for feature in self.CategoricalFeatures:
-			self.df[feature] = self.df[feature].astype(str)
-			self.df[feature] = np.where(self.df[feature]=='nan',np.NaN,self.df[feature])
+		print("Converting Categorical Features to String...")
+		for feature in tqdm(self.CategoricalFeatures):
+			if self.df[feature].dtype == np.number:
+				self.df[feature] = np.where(pd.isnull(self.df[feature]),self.df[feature],self.df[feature].astype(str))
+			
+			# self.df[feature] = self.df[feature].astype(str)
+			# self.df[feature] = np.where(self.df[feature]=='nan',np.NaN,self.df[feature])
 	
+	def TargetAnalysis(self,target):
+		'''
+		Target Specific Analysis
+		'''
+		print("Initiating Target Specific Analysis...")
+		start = time.time()
+		target = target.replace(" ", "_")
+		target = target.replace("(", "_")
+		target = target.replace(")", "_")
+		if target in self.CategoricalFeatures:
+			targetAnalysis = TargetAnalysisCategorical.TargetAnalysisCategorical(self.df, self.CategoricalFeatures, self.ContinuousFeatures, self.OtherFeatures, target, self.title)
+		elif target in self.ContinuousFeatures:
+			targetAnalysis = TargetAnalysisContinuous.TargetAnalysisContinuous(self.df, self.CategoricalFeatures, self.ContinuousFeatures, self.OtherFeatures, target, self.title)
+		end = time.time()
+		# print("Time to initialize TargetAnalysis = ",end-start)
+		targetAnalysis.TargetSpecificAnalysis()
+		
+		
+		return
 
 	def EDAToHTML(self,out=None):
 		'''
@@ -119,7 +152,7 @@ class EDA:
 		else:
 			TTest = pd.DataFrame()
 			TTestDifferent = pd.DataFrame()
-			TTestNotDifferent = pd.DataFrame()		
+			TTestNotDifferent = pd.DataFrame()
 		
 			
 		if(out):
@@ -151,6 +184,7 @@ class EDA:
 					   ,TTestDifferent = TTestDifferent
 					   ,TTestNotDifferent = TTestNotDifferent
 					   ,VIF_columns = self.VIF()
+					   #,AUC_columns = self.AreaUnderCurve()
 					   ,Variance = self.std_variance()
 					   ,NullValue = pd.DataFrame(round((self.df.isnull().sum()/self.df.shape[0])*100)).reset_index().rename(columns={'index': 'Feature',0:'NullPercentage'})
 					   ,ScatterImage = self.ScatterPlot()
@@ -321,7 +355,7 @@ class EDA:
 		df = df.describe().transpose()
 		VariableDetails = []
 		for key,value in df.iterrows():
-			Edges, Hist, HistValues, PDF, Color1, Color2 = self.HistChart(key)
+			Edges, EdgesValues, Hist, HistValues, PDF, Color1, Color2 = self.HistChart(key)
 			VariableDetails.append(dict(Name = key
 								,Count = value['count']
 								,Mean = value['mean']
@@ -336,6 +370,7 @@ class EDA:
 								,Hist = Hist
 								,HistValues = HistValues
 								,Edges = Edges
+								,EdgesValues = EdgesValues
 								,PDF = PDF
 								,Color1 = Color1
 								,Color2 = Color2
@@ -387,8 +422,8 @@ class EDA:
 	def HistChart (self, var):
 		start = time.time()
 		h = list(self.df[var].dropna())
-		hist, edges = np.histogram(h, density=True, bins=50)
-		histValues, edgesValues = np.histogram(h, density=False, bins=50)
+		hist, edges = np.histogram(h, density=True, bins=35)
+		histValues, edgesValues = np.histogram(h, density=False, bins=35)
 		h.sort()
 		hmean = np.mean(h)
 		hstd = np.std(h)
@@ -397,13 +432,14 @@ class EDA:
 		hist = ','.join([str(round(x,5)) for x in hist])
 		histValues = ','.join([str(x) for x in histValues])
 		edges = ','.join([str(x) for x in edges])
+		edgesValues = ','.join([str(x) for x in edgesValues])
 		pdf = ','.join([str(round(x,5)) for x in pdf])
 		indices = random.sample(range(len(self.SelectedColors)), 2)
 		colors=[self.SelectedColors[i] for i in sorted(indices)]
 		end = time.time()
 		if self.debug == 'YES':
 			print('HistChart',end-start)
-		return edges, hist, histValues, pdf, colors[0], colors[1]
+		return edges,edgesValues, hist, histValues, pdf, colors[0], colors[1]
 		
 	def CorrList (self):
 		start = time.time()
@@ -532,12 +568,41 @@ class EDA:
 		start = time.time()
 		vif_list = []
 		X = self.df[self.ContinuousFeatures].dropna()
-		for var in X.columns:
-			vif = variance_inflation_factor(X[X.columns].values,X.columns.get_loc(var))
-			vif_list.append(dict(column=var,vif=vif))
+		if len(list(self.ContinuousFeatures)) > 1:
+			for var in X.columns:
+				vif = variance_inflation_factor(X[X.columns].values,X.columns.get_loc(var))
+				vif_list.append(dict(column=var,vif=vif))
 			
 		end = time.time()
 		if self.debug == 'YES':
 			print('VIF',end-start)
 		return pd.DataFrame(vif_list)
 	
+	def AreaUnderCurve(self):
+		"""
+		Get the area under curve, if each scaled features are plotted against each other
+		"""
+		start = time.time()
+		temp_df = self.df.copy()
+		AUC_list = []
+		le = LabelEncoder()
+		scaler = MinMaxScaler()
+		for feature in self.CategoricalFeatures:
+			temp_df[feature] = le.fit_transform(pd.DataFrame(temp_df[feature]))
+		
+		cols_for_auc = self.CategoricalFeatures
+		cols_for_auc.extend(self.ContinuousFeatures)
+		for feature in cols_for_auc:
+			temp_df[feature] = scaler.fit_transform(pd.DataFrame(temp_df[feature]))
+			for feature_2 in cols_for_auc:
+				if feature != feature_2:
+					area_under_curve = auc(temp_df[feature],temp_df[feature_2],reorder=True)
+					AUC_list.append(dict(dependent = feature, independent = feature_2, auc=area_under_curve))
+					
+		if self.debug == 'YES':
+			print('AUC',end-start)		
+			
+		return pd.DataFrame(AUC_list)
+		
+		
+			

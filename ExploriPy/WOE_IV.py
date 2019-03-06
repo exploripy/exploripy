@@ -48,18 +48,22 @@ class WOE:
         woe_dict = {}
         iv = 0
         for x1 in x_labels:
-            y1 = y[np.where(x == x1)[0]]
-            event_count, non_event_count = self.count_binary(y1, event=event)
-            rate_event = 1.0 * event_count / event_total
-            rate_non_event = 1.0 * non_event_count / non_event_total
-            if rate_event == 0:
-                woe1 = self._WOE_MIN
-            elif rate_non_event == 0:
-                woe1 = self._WOE_MAX
-            else:
-                woe1 = math.log(rate_event / rate_non_event)
-            woe_dict[x1] = woe1
-            iv += (rate_event - rate_non_event) * woe1
+            x_set = set(x[x==x1].index)
+            y_set = set(y.index)
+            if x_set < y_set:
+            #if x[x==x1].index in y.index:
+                y1 = y[np.where(x == x1)[0]]
+                event_count, non_event_count = self.count_binary(y1, event=event)
+                rate_event = 1.0 * event_count / event_total
+                rate_non_event = 1.0 * non_event_count / non_event_total
+                if rate_event == 0:
+                    woe1 = self._WOE_MIN
+                elif rate_non_event == 0:
+                    woe1 = self._WOE_MAX
+                else:
+                    woe1 = math.log(rate_event / rate_non_event)
+                woe_dict[x1] = woe1
+                iv += (rate_event - rate_non_event) * woe1
         return woe_dict, iv
 
     def woe_replace(self, X, woe_arr):
