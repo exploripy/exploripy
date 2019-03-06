@@ -1,7 +1,7 @@
 # ExploriPy
 [![PyPI version](https://badge.fury.io/py/ExploriPy.svg)](https://badge.fury.io/py/exploripy)
 [![Downloads](https://pepy.tech/badge/ExploriPy)](https://pepy.tech/project/ExploriPy) 
-<a href="https://github.com/bhagatsajan0073/dominance_analysis/blob/master/LICENSE">
+<a href="https://github.com/Vibish/exploripy/blob/master/LICENSE">
   <img src="https://img.shields.io/github/license/bhagatsajan0073/dominance_analysis.svg">
 </a>
 <a href="https://github.com/bhagatsajan0073/dominance_analysis/stargazers">
