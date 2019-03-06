@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/github/license/Vibish/exploripy.svg">
 </a>
 <a href="https://github.com/Vibish/exploripy/stargazers">
-  <img src="https://img.shields.io/github/stars/bhagatsajan0073/dominance_analysis.svg">
+  <img src="https://img.shields.io/github/stars/Vibish/exploripy.svg">
 </a>
 <a href="https://github.com/bhagatsajan0073/dominance_analysis/network/members">
   <img src="https://img.shields.io/github/forks/bhagatsajan0073/dominance_analysis.svg">
