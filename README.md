@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/github/stars/Vibish/exploripy.svg">
 </a>
 <a href="https://github.com/Vibish/exploripy/network/members">
-  <img src="https://img.shields.io/github/forks/bhagatsajan0073/dominance_analysis.svg">
+  <img src="https://img.shields.io/github/forks/Vibish/exploripy.svg">
 </a>
 [![Build Status](https://travis-ci.org/bhagatsajan0073/dominance-analysis.svg?branch=master)](https://travis-ci.org/bhagatsajan0073/dominance-analysis)
 [![Build Status](https://dev.azure.com/shashanksist/shashank_sist/_apis/build/status/bhagatsajan0073.dominance-analysis?branchName=master)](https://dev.azure.com/shashanksist/shashank_sist/_build?definitionId=2)
