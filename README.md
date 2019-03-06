@@ -2,9 +2,9 @@
 [![PyPI version](https://badge.fury.io/py/ExploriPy.svg)](https://badge.fury.io/py/exploripy)
 [![Downloads](https://pepy.tech/badge/ExploriPy)](https://pepy.tech/project/ExploriPy) 
 <a href="https://github.com/Vibish/exploripy/blob/master/LICENSE">
-  <img src="https://img.shields.io/github/license/bhagatsajan0073/dominance_analysis.svg">
+  <img src="https://img.shields.io/github/license/Vibish/exploripy.svg">
 </a>
-<a href="https://github.com/bhagatsajan0073/dominance_analysis/stargazers">
+<a href="https://github.com/Vibish/exploripy/stargazers">
   <img src="https://img.shields.io/github/stars/bhagatsajan0073/dominance_analysis.svg">
 </a>
 <a href="https://github.com/bhagatsajan0073/dominance_analysis/network/members">
