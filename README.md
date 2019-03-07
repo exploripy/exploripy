@@ -36,8 +36,8 @@ pip install ExploriPy
 #### Usage
 ``` 
 from ExploriPy import EDA
-df = pd.read_csv(' BigMartSales_Train.csv',na_values = 'nan')
-CategoricalFeatures = ['Item_Identifier','Outlet_Identifier','Item_Fat_Content','Item_Type','Outlet_Establishment_Year','Outlet_Size','Outlet_Location_Type','Outlet_Type','TrainTest']
+df = pd.read_csv('BigMartSales_Train.csv',na_values = 'nan')
+CategoricalFeatures = ['Item_Identifier','Outlet_Identifier','Item_Fat_Content','Item_Type','Outlet_Establishment_Year','Outlet_Size','Outlet_Location_Type','Outlet_Type']
 eda = EDA(train_df,CategoricalFeatures,OtherFeatures=['Outlet_Establishment_Year'],title='Exploratory Data Analysis for Big Mart Sales III - Based on Item_Outlet_Sales')
 eda.TargetAnalysis('Item_Outlet_Sales') # For Target Specific Analysis
 # eda.EDAToHTML() # For generic analysis on the dataset. 
