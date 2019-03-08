@@ -382,7 +382,11 @@ class TargetAnalysisContinuous:
 			df[CategoricalFeature] = df[CategoricalFeature].astype(str)
 			df = df.merge(cat_list, left_on=CategoricalFeature, right_on='category', how='inner')			
 			edges,edgesValues, hist, histValues, pdf, color1, color2 = self.HistChart(list(df[target].dropna()))
-			tukey_histogram_list.append(dict(category = cat_name, edges = edges,edgesValues = edgesValues, hist = hist, histValues = histValues, pdf = pdf, color1 = self.SelectedColors[i], color2 = color2))
+			
+			if i >= len(self.SelectedColors) - 2:
+				tukey_histogram_list.append(dict(category = cat_name, edges = edges,edgesValues = edgesValues, hist = hist, histValues = histValues, pdf = pdf, color1 = self.AllColors[i], color2 = color2))
+			else: 
+				tukey_histogram_list.append(dict(category = cat_name, edges = edges,edgesValues = edgesValues, hist = hist, histValues = histValues, pdf = pdf, color1 = self.SelectedColors[i], color2 = color2))
 			i = i+1
 			
 		return tukey_histogram_list
