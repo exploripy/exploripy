@@ -278,7 +278,7 @@ class TargetAnalysisCategorical:
 		g2.columns = ['category','total_count']
 		g1 = g1.merge(g2, how='left', on='category')
 		g1['null_percent'] = round((g1['null_count']*100)/g1['total_count'],2)
-		g1.drop(columns = ['null_count','total_count'], inplace = True)		
+		g1.drop(['null_count','total_count'], axis=1, inplace = True)		
 		g1.sort_values('null_percent',ascending = False, inplace = True)
 		g1 = g1.head(10)		
 		
