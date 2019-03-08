@@ -21,7 +21,8 @@ class FeatureType:
 		
 				
 	def CategoricalFeatures(self):
-		return [key for key, value in self.likely_cat.items() if (value == True) & (key not in self.OtherCats)]
+		cat_features = [key for key, value in self.likely_cat.items() if (value == True) & (key not in self.OtherCats)]
+		return list(set(cat_features) - set(self.OtherCats))
 		
 	def NonCategoricalFeatures(self):
 		return [key for key, value in self.likely_cat.items() if value == False]
