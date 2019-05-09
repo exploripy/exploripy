@@ -1,7 +1,6 @@
 from setuptools import setup
 
-with open("README_pi.md", "r") as fh:
-    long_description = fh.read()
+
 	
 setup(name='ExploriPy',
       version='1.0.1',
