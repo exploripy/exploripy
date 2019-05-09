@@ -29,14 +29,16 @@ class FeatureType:
 	
 	def ContinuousFeatures(self):
 		NonCatFeatures = self.NonCategoricalFeatures()
-		ContinuousFeatures = list(self.df[NonCatFeatures]._get_numeric_data().columns)
+		#ContinuousFeatures = list(self.df[NonCatFeatures]._get_numeric_data().columns)
+		ContinuousFeatures = self.df.select_dtypes(include=[np.number]).columns
+		ContinuousFeatures = set(ContinuousFeatures) - set(self.CategoricalFeatures())
 		ContinuousFeatures = list(set(ContinuousFeatures)-set(self.OtherCats))
 		return ContinuousFeatures
 		#return [var for var in NonCatFeatures if self.df[var].dtype == np.number]
 		
 	def OtherFeatures(self):		
 		NonCatFeatures = self.NonCategoricalFeatures()
-		OtherFeatures = [var for var in NonCatFeatures if self.df[var].dtype != np.number]
+		OtherFeatures = [var for var in NonCatFeatures if (self.df[var].dtype != np.number) & (self.df[var].dtype != np.int64) & (self.df[var].dtype != np.float64) & (self.df[var].dtype != np.int32) & (self.df[var].dtype != np.float32)]
 		if len(self.OtherCats) > 0:
 			OtherFeatures = list(set(OtherFeatures)|set(self.OtherCats))			
 		return OtherFeatures

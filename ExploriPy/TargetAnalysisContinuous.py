@@ -226,8 +226,13 @@ class TargetAnalysisContinuous:
 		print('Performing ANOVA...')
 		for CategoricalVar in tqdm(self.CategoricalFeatures):
 			temp_df = self.df[[CategoricalVar, target]].dropna()
-			f,p = stats.f_oneway(*[list(temp_df[temp_df[CategoricalVar]==name][target]) for name in set(temp_df[CategoricalVar])])
-			AnovaList.append(dict(Categorical = CategoricalVar, PValue = p))
+			try:
+				f,p = stats.f_oneway(*[list(temp_df[temp_df[CategoricalVar]==name][target]) for name in set(temp_df[CategoricalVar])])
+				AnovaList.append(dict(Categorical = CategoricalVar, PValue = p))
+			except:
+				# Do Nothing. Skip.
+				1==1
+			
 		Anova_df = pd.DataFrame(AnovaList)
 		if Anova_df.shape[0]>0:
 			Anova_df = Anova_df[Anova_df['PValue']<=0.05]
@@ -251,7 +256,7 @@ class TargetAnalysisContinuous:
 			# g1.sort_values(['count'],ascending=False,inplace=True)
 			# top_categories = list(g1.head(5)['category'])
 			
-			if self.target != feature:
+			if (self.target != feature) & (self.df[feature].nunique()>=2):
 				#feature_categories,target_d_list,category_colors = self.TargetDistribution(feature)
 				target_null_distribution = self.TargetNullDistribution(feature)
 				CategoriesCount_df = self.CategoriesCount(feature)

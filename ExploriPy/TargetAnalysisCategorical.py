@@ -163,8 +163,11 @@ class TargetAnalysisCategorical:
 			Get the percentage of each category 
 		'''
 		print('Calculating Target Percentage...')
-		indices = random.sample(range(len(self.AllColors)), self.df[self.target].nunique())
-		colors=[self.AllColors[i] for i in sorted(indices)]
+		if (len(self.AllColors) < self.df[self.target].nunique()):
+			colors = self.getRandomColors(self.df[self.target].nunique())
+		else:
+			indices = random.sample(range(len(self.AllColors)), self.df[self.target].nunique())
+			colors=[self.AllColors[i] for i in sorted(indices)]
 		d1 = pd.DataFrame(self.df[self.target].value_counts())
 		d1 = d1.reset_index()
 		d1.columns = ['category','value']
@@ -258,8 +261,12 @@ class TargetAnalysisCategorical:
 			Get Random colors
 		'''
 		number_of_colors = g1.shape[0]
-		indices = random.sample(range(len(self.AllColors)), self.df[self.target].nunique())
-		category_colors=[self.AllColors[i] for i in sorted(indices)]
+		if (len(self.AllColors) < self.df[self.target].nunique()):
+			category_colors = self.getRandomColors(self.df[self.target].nunique())
+		else:
+			indices = random.sample(range(len(self.AllColors)), self.df[self.target].nunique())
+			category_colors=[self.AllColors[i] for i in sorted(indices)]
+		
 		
 		return feature_categories,target_d_list,category_colors
 		
@@ -294,8 +301,13 @@ class TargetAnalysisCategorical:
 		AnovaList = []
 		for ContinuousVar in self.ContinuousFeatures:
 			temp_df = self.df[[ContinuousVar, target]].dropna()
-			f,p = stats.f_oneway(*[list(temp_df[temp_df[target]==name][ContinuousVar]) for name in set(temp_df[target])])
-			AnovaList.append(dict(Continuous = ContinuousVar, PValue = p))
+			try:
+				f,p = stats.f_oneway(*[list(temp_df[temp_df[target]==name][ContinuousVar]) for name in set(temp_df[target])])
+				AnovaList.append(dict(Continuous = ContinuousVar, PValue = p))
+			except:
+				# Do nothing. Skip.
+				1==1
+			
 		Anova_df = pd.DataFrame(AnovaList)
 		if Anova_df.shape[0]>0:
 			Anova_df = Anova_df[Anova_df['PValue']<=0.05]
@@ -322,7 +334,8 @@ class TargetAnalysisCategorical:
 			hist_list.append(dict(category = column, edges = edges,edgesValues = edgesValues, hist = hist, histValues = histValues, pdf = pdf, color1 = color1, color2 = color2))
 			boxPlotFileName = self.BoxPlot(column)
 				
-			ContinuousFeaturesHistChart_list.append(dict(ContinuousFeature=column,hist_list=hist_list,
+			ContinuousFeaturesHistChart_list.append(dict(ContinuousFeature=column,
+															hist_list=hist_list,
 															Count = g1.loc['count'][0],
 															Mean = g1.loc['mean'][0],
 															Median = self.df[column].median(),
@@ -358,55 +371,57 @@ class TargetAnalysisCategorical:
 		return OutFileName
 		
 	def GroupTukeyHSD(self,continuous, categorical):
-		
-		mc = MultiComparison(continuous, categorical)
-		result = mc.tukeyhsd()
-		reject = result.reject
-		meandiffs = result.meandiffs
-		UniqueGroup = mc.groupsunique
-		group1 = [UniqueGroup[index] for index in mc.pairindices[0]]
-		group2 = [UniqueGroup[index] for index in mc.pairindices[1]]
-		reject = result.reject
-		meandiffs = [round(float(meandiff),3) for meandiff in result.meandiffs]
-		columns = ['Group 1', "Group 2", "Mean Difference", "Reject"]
-		TukeyResult = pd.DataFrame(np.column_stack((group1, group2, meandiffs, reject)), columns=columns)
-		'''
-			Once Tukey HSD test is done. Select only those entries, with Reject=False. 
-			This implies, only entries with similar distribution is selected.
-			Once selected, group them into different distributions.
-		'''		
-		TukeyResult_false = TukeyResult[TukeyResult['Reject']=='False']
-		overall_distribution_list = []
-		same_distribution_list = []		
-		if len(TukeyResult_false) > 0:
-			for group1 in TukeyResult_false['Group 1'].unique():
-				if group1 not in overall_distribution_list:
-					temp_list=[]
-					temp_result = TukeyResult_false[TukeyResult_false['Group 1']== group1]
-					overall_distribution_list.append(group1)
-					temp_list.append(group1)
-					for entry in list(temp_result['Group 2'].unique()):
-						if entry not in overall_distribution_list:
-							overall_distribution_list.append(entry)
-							temp_list.append(entry)
-					
-			#         if temp_result['Group 2'].nunique()>1:
-			#             temp_list.extend((temp_result['Group 2'].unique()))
-			#         else:
-			#             temp_list.append((temp_result['Group 2'].unique()[0]))
-					same_distribution_list.append(dict(list_name=group1, lists=temp_list, length=len(temp_list)))
-					
-			if len(set(categorical.unique())-set(overall_distribution_list)) >0:
-				missing_categories = list(set(categorical.unique())-set(overall_distribution_list))
-				for group1 in missing_categories:
-					same_distribution_list.append(dict(list_name=group1, lists=[group1], length=1))
+		try:
+			mc = MultiComparison(continuous, categorical)
+			result = mc.tukeyhsd()
+			reject = result.reject
+			meandiffs = result.meandiffs
+			UniqueGroup = mc.groupsunique
+			group1 = [UniqueGroup[index] for index in mc.pairindices[0]]
+			group2 = [UniqueGroup[index] for index in mc.pairindices[1]]
+			reject = result.reject
+			meandiffs = [round(float(meandiff),3) for meandiff in result.meandiffs]
+			columns = ['Group 1', "Group 2", "Mean Difference", "Reject"]
+			TukeyResult = pd.DataFrame(np.column_stack((group1, group2, meandiffs, reject)), columns=columns)
+			'''
+				Once Tukey HSD test is done. Select only those entries, with Reject=False. 
+				This implies, only entries with similar distribution is selected.
+				Once selected, group them into different distributions.
+			'''		
+			TukeyResult_false = TukeyResult[TukeyResult['Reject']=='False']
+			overall_distribution_list = []
+			same_distribution_list = []		
+			if len(TukeyResult_false) > 0:
+				for group1 in TukeyResult_false['Group 1'].unique():
+					if group1 not in overall_distribution_list:
+						temp_list=[]
+						temp_result = TukeyResult_false[TukeyResult_false['Group 1']== group1]
+						overall_distribution_list.append(group1)
+						temp_list.append(group1)
+						for entry in list(temp_result['Group 2'].unique()):
+							if entry not in overall_distribution_list:
+								overall_distribution_list.append(entry)
+								temp_list.append(entry)
+						
+				#         if temp_result['Group 2'].nunique()>1:
+				#             temp_list.extend((temp_result['Group 2'].unique()))
+				#         else:
+				#             temp_list.append((temp_result['Group 2'].unique()[0]))
+						same_distribution_list.append(dict(list_name=group1, lists=temp_list, length=len(temp_list)))
+						
+				if len(set(categorical.unique())-set(overall_distribution_list)) >0:
+					missing_categories = list(set(categorical.unique())-set(overall_distribution_list))
+					for group1 in missing_categories:
+						same_distribution_list.append(dict(list_name=group1, lists=[group1], length=1))
 
-		else:
-			for group1 in categorical.unique():
-				same_distribution_list.append(dict(list_name=group1, lists=[group1], length=1))
-		
-		g1 = pd.DataFrame(same_distribution_list)
-		return (g1.sort_values('length',ascending=False))
+			else:
+				for group1 in categorical.unique():
+					same_distribution_list.append(dict(list_name=group1, lists=[group1], length=1))
+			
+			g1 = pd.DataFrame(same_distribution_list).sort_values('length',ascending=False)
+		except:
+			g1 = pd.DataFrame()
+		return g1
 		
 		
 	def TukeyHistogram(self, GroupTukeyHSD_df, CategoricalFeature, ContinuousFeature):		
@@ -417,8 +432,10 @@ class TargetAnalysisCategorical:
 			cat_name = row['list_name']
 			df = self.df[[CategoricalFeature,ContinuousFeature]]
 			df[CategoricalFeature] = df[CategoricalFeature].astype(str)
-			df = df.merge(cat_list, left_on=CategoricalFeature, right_on='category', how='inner')			
-			edges,edgesValues, hist, histValues, pdf, color1, color2 = self.HistChart(list(df[ContinuousFeature].dropna()))
+			df = df.merge(cat_list, left_on=CategoricalFeature, right_on='category', how='inner')
+			df[ContinuousFeature] = df[ContinuousFeature].replace(-np.inf, np.nan)
+			df[ContinuousFeature] = df[ContinuousFeature].replace(np.inf, np.nan)
+			edges,edgesValues, hist, histValues, pdf, color1, color2 = self.HistChart(list(df[np.isfinite(df[ContinuousFeature])][ContinuousFeature].dropna()))
 			tukey_histogram_list.append(dict(category = cat_name, edges = edges,edgesValues = edgesValues, hist = hist, histValues = histValues, pdf = pdf, color1 = self.SelectedColors[i], color2 = color2))
 			i = i+1
 			
@@ -426,7 +443,7 @@ class TargetAnalysisCategorical:
 		
 	def HistChart (self, var):
 		h = var
-		hist, edges = np.histogram(h, density=True, bins=35)
+		hist, edges = np.histogram(h, density=True, bins=35,range=(min(var),max(var)))
 		histValues, edgesValues = np.histogram(h, density=False, bins=35)
 		h.sort()
 		hmean = np.mean(h)
