@@ -466,10 +466,16 @@ class TargetAnalysisCategorical:
 			Show the correlation heatmap, only if the correlation 
 		'''
 		print('Generating Correlation Heatmap...')
-		df = self.df[self.ContinuousFeatures]
+		cols_to_consider = []
+		for col in self.ContinuousFeatures:
+			if np.var(self.df[col])!=0:
+				cols_to_consider.append(col)
+		
+		df = self.df[cols_to_consider]
 		CorrDf = df.corr()
 		CorrList = []
-		MasterList = []		
+		MasterList = []
+		
 		for col in CorrDf.columns:
 			for index,row in CorrDf.iterrows():
 				CorrList.append(0 if (row[col] > -0.5) & (row[col] <0.5) else row[col])

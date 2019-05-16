@@ -458,13 +458,19 @@ class TargetAnalysisContinuous:
 		'''
 		print('Generating Correlation Heatmap...')
 		target = self.target
-		df = self.df[self.ContinuousFeatures]
+		cols_to_consider = []
+		for col in self.ContinuousFeatures:
+			if np.var(self.df[col])!=0:
+				cols_to_consider.append(col)
+		df = self.df[cols_to_consider]
 		CorrDf = df.corr()
+		
 		corr_df = pd.DataFrame(CorrDf[(CorrDf[target]>=0.5)|(CorrDf[target]<=-0.5)][target]).reset_index()
 		corr_df.columns = ['ContinuousFeature','Correlation']
 		corr_df = corr_df[corr_df['ContinuousFeature']!=target]
 		CorrList = []
 		MasterList = []		
+		
 		for col in CorrDf.columns:
 			for index,row in CorrDf.iterrows():
 				CorrList.append(0 if (row[col] > -0.5) & (row[col] <0.5) else row[col])
