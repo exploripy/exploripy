@@ -15,6 +15,8 @@ import seaborn as sns
 from statsmodels.stats.multicomp import MultiComparison
 import warnings
 warnings.filterwarnings('ignore')
+import platform
+
 
 class TargetAnalysisCategorical: 
 	def __init__(self, df, CategoricalFeatures, ContinuousFeatures, OtherFeatures, target, title):
@@ -57,15 +59,27 @@ class TargetAnalysisCategorical:
 		'''
 		Perform Target Specific Analysis and Render the HTML file
 		'''
+		pth = pd.__path__
+		this_dir, filename = os.path.split(pth[0])
+
 		if self.target in self.CategoricalFeatures:
 			filename = 'HTMLTemplate\\dist\\HTMLTemplate_target_Categorical.html'
+
+			if platform.system() =='Linux':
+				filename = 'ExploriPy/HTMLTemplate/dist/HTMLTemplate_target_Categorical.html'
+				Template_PATH = os.path.join(this_dir, filename)
+			else:
+				this_dir, this_filename = os.path.split(__file__)
+				Template_PATH = os.path.join(this_dir, filename)
+
 		elif self.target in self.ContinuousFeatures:
 			filename = 'HTMLTemplate\\dist\\HTMLTemplate_target_Continuous.html'
-			
-		this_dir, this_filename = os.path.split(__file__)
-		
-		Template_PATH = os.path.join(this_dir, filename)		
-		
+			if platform.system() =='Linux':
+				filename = 'ExploriPy/HTMLTemplate/dist/HTMLTemplate_target_Continuous.html'
+				Template_PATH = os.path.join(this_dir, filename)
+			else:
+				this_dir, this_filename = os.path.split(__file__)
+				Template_PATH = os.path.join(this_dir, filename)
 
 		with open(Template_PATH) as file:
 			template = Template(file.read())
@@ -96,6 +110,8 @@ class TargetAnalysisCategorical:
 			html = template.render(title = self.title)
 			
 		out_filename = os.path.join(this_dir, 'HTMLTemplate\\dist\\result.html')
+		if platform.system() == 'Linux':
+			out_filename = os.path.join(this_dir, 'ExploriPy/HTMLTemplate/dist/result.html')
 		with io.open(out_filename, mode='w', encoding='utf-8') as f:
 			f.write(html)
 		
@@ -365,7 +381,9 @@ class TargetAnalysisCategorical:
 		box.set_edgecolor(colors[1])
 		sns.despine(offset=10, trim=True)
 		this_dir, this_filename = os.path.split(__file__)
-		OutFileName = os.path.join(this_dir, 'HTMLTemplate/dist/output/'+feature + '.png')		
+		OutFileName = os.path.join(this_dir, 'HTMLTemplate/dist/output/'+feature + '.png')
+		if platform.system() == 'Linux':
+			out_filename = os.path.join(this_dir, 'ExploriPy/HTMLTemplate/dist/output/'+feature + '.png')
 		plt.savefig(OutFileName)
 		
 		return OutFileName

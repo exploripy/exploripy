@@ -61,12 +61,16 @@ class TargetAnalysisContinuous:
 		'''
 		Perform Target Specific Analysis and Render the HTML file
 		'''
-		
+		pth = pd.__path__
+		this_dir, filename = os.path.split(pth[0])
+
 		filename = 'HTMLTemplate\\dist\\HTMLTemplate_target_Continuous.html'
-			
-		this_dir, this_filename = os.path.split(__file__)
-		
-		Template_PATH = os.path.join(this_dir, filename)
+		if platform.system() == 'Linux':
+			filename = 'ExploriPy/HTMLTemplate/dist/HTMLTemplate_target_Continuous.html'
+			Template_PATH = os.path.join(this_dir, filename)
+		else:
+			this_dir, this_filename = os.path.split(__file__)
+			Template_PATH = os.path.join(this_dir, filename)
 		
 		with open(Template_PATH) as file:
 			template = Template(file.read())			
@@ -96,6 +100,9 @@ class TargetAnalysisContinuous:
 					   )
 			
 		out_filename = os.path.join(this_dir, 'HTMLTemplate\\dist\\result.html')
+		if platform.system() =='Linux':
+			out_filename = os.path.join(this_dir, 'ExploriPy/HTMLTemplate/dist/result.html')
+
 		with io.open(out_filename, mode='w', encoding='utf-8') as f:
 			f.write(html)
 		
@@ -155,7 +162,9 @@ class TargetAnalysisContinuous:
 		box.set_edgecolor(colors[1])
 		sns.despine(offset=10, trim=True)
 		this_dir, this_filename = os.path.split(__file__)
-		OutFileName = os.path.join(this_dir, 'HTMLTemplate/dist/output/'+feature + '.png')		
+		OutFileName = os.path.join(this_dir, 'HTMLTemplate/dist/output/'+feature + '.png')
+		if platform.system() =='Linux':
+			OutFileName = os.path.join(this_dir, 'ExploriPy/HTMLTemplate/dist/output/' + feature + '.png')
 		plt.savefig(OutFileName)
 		
 		return OutFileName
@@ -167,7 +176,9 @@ class TargetAnalysisContinuous:
 		
 		sns.despine(offset=10, trim=True)
 		this_dir, this_filename = os.path.split(__file__)
-		OutFileName = os.path.join(this_dir, 'HTMLTemplate/dist/output/'+feature + '_regPlot.png')		
+		OutFileName = os.path.join(this_dir, 'HTMLTemplate/dist/output/'+feature + '_regPlot.png')
+		if platform.system() =='Linux':
+			OutFileName = os.path.join(this_dir, 'ExploriPy/HTMLTemplate/dist/output/' + feature + '_regPlot.png')
 		plt.savefig(OutFileName)
 		
 		return OutFileName
