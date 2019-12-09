@@ -26,7 +26,6 @@ ExploriPy reduces a data analyst’s efforts significantly in the initial EDA. I
 &nbsp;   &nbsp;  [Target Variable](#target-variable) </br>
 &nbsp;   &nbsp;  [Categorical Vs Target](#categorical-vs-target)</br>
 &nbsp;   &nbsp;  [Continuous Vs Target](#continuous-vs-target)</br>
-&nbsp;   &nbsp;  [Continuous Vs Continuous](#continuous-vs-continuous)
 
 #### Installation Steps
 
@@ -115,24 +114,24 @@ Once we know that the categorical variable influences the target variable then t
     
 #### Continuous Vs Target 
 <br>
-* Statistics for each of the Continuous Variables
-* Box Plot for each of the Continuous Variables
-* Histogram and Distribution for each of the Continuous Variables
+* Statistics for each of the Continuous Variables <br>
+* Box Plot for each of the Continuous Variables <br>
+* Histogram and Distribution for each of the Continuous Variables <br>
 <p><img src='/ExploriPy/doc_images/Stats on Continuous Variables.png'> <br> 
 
 #### Continuous Vs Target Categorical Feature 
 <br>
-* Influencing Categorical Variables based on ANOVA
-* Categories with Similar Distributions
-* Based on PostHoc Test (Tukey HSD), get the categories with similar distributions and plot the distributions as well.
+* Influencing Categorical Variables based on ANOVA <br>
+* Categories with Similar Distributions <br>
+* Based on PostHoc Test (Tukey HSD), get the categories with similar distributions and plot the distributions as well. <br>
 
 #### Continuous Vs Target Continuous Feature 
 <br>
-* Dependent Continuous Variables based on Correlation
+* Dependent Continuous Variables based on Correlation <br>
 <p><img src='/ExploriPy/doc_images/Correlation Heatmap.png'> <br> 
-* Scatter Plot for Continuous with Continuous Target variable
+* Scatter Plot for Continuous with Continuous Target variable <br>
 <p><img src='/ExploriPy/doc_images/Scatter plot.PNG'> <br> 
-* Correlation Heatmap, with all the continuous variables, considering only combinations with correlation >=0.5 or <=-0.5
+* Correlation Heatmap, with all the continuous variables, considering only combinations with correlation >=0.5 or <=-0.5 <br>
 <p><img src='/ExploriPy/doc_images/Correlation Heatmap.png'> <br> 
                                                                                                                         
 
