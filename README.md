@@ -56,7 +56,7 @@ The output of the package is a HTML file with the following features.
 
 #### List of Features
 
-* List of Features available and their datatypes. <br>
+* List of Features available and their datatypes. 
 <p><img src='ExploriPy/doc_images/List of Features.png'></p>
 
 * Percentage of Categorical, Continuous and Other Variables.
@@ -64,23 +64,23 @@ The output of the package is a HTML file with the following features.
 
 
 #### Null Values
-<br>
-Percentage of null values in each column. Additionally, a bar chart is also populated with the data. <br>
+
+Percentage of null values in each column. Additionally, a bar chart is also populated with the data.
 <p><img src='ExploriPy/doc_images/Null Values.png'> </p> 
 <br> 
 
 #### Target Variable
-<br>
+
 Info displayed for Target Variable: <br>
 * Total Number of Records <br>
 * Total Number of Nulls in Target <br>
 * Percentage of Nulls in Target <br>
 
-**For Categorical Target Variable:** <br>
-* List of Categories and Number of records for each category <br>
-* Pie Chart on Percentage of Categorical Variables <br>
+**For Categorical Target Variable:** 
+* List of Categories and Number of records for each category
+* Pie Chart on Percentage of Categorical Variables 
 <p><img src='ExploriPy/doc_images/Target Categorical.png'> </p>
-<br>
+
  
 **For Continuous Target Variable** <br>
 * Statistics on the Continuous Target Variable <br>
