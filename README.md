@@ -67,7 +67,7 @@ The output of the package is a HTML file with the following features.
 
 Percentage of null values in each column. Additionally, a bar chart is also populated with the data.
 <p><img src='ExploriPy/doc_images/Null Values.png'> </p> 
-<br> 
+
 
 #### Target Variable
 
@@ -86,16 +86,13 @@ Info displayed for Target Variable: <br>
 * Statistics on the Continuous Target Variable <br>
 * Distribution of the Continuous Target Variable <br>
 <p><img src='ExploriPy/doc_images/Target Continuous.png'> </p>
-<br>
 
 #### Categorical Vs Target 
-<br>
 List of Top 30 categories along with their count and percentage, for every categorical variable <br>
 <p><img src='ExploriPy/doc_images/Categorical Count.png'> </p>
-<br>
 
 #### For Target Categorical Feature 
-<br>
+
 * Dependent list of variables, based on ChiSquare Test of Independence <br>
 <i> Chi square test is done to test the independence of two Categorical variable. The test is used when both the independent variable and the dependent variable are both categorical. When two variables are statistically independent then they are not related to each other i.e. which category an object falls in the independent variable will not determine the category it will fall in the dependent variable. <br>
 The P values gives the probability that the null hypothesis is true. Usually the null hypothesis states that there is no relationship between the two variables. </i>
@@ -108,20 +105,20 @@ The P values gives the probability that the null hypothesis is true. Usually the
 
 * Null Percentage for each of the category, when compared with number of null records in the Target variable. This will help to determine, if there is any stream of data, which has the problem.
  <p><img src='ExploriPy/doc_images/Categorical Vs Null Percentage in Target.png'> </p>
- <br> 
+
  
 #### For Target Continuous Feature: 
-<br>
+
 * Influencing Categorical Variables based on ANOVA (Analysis of variance) <br>
 <i>This test is done for a selected target variable and it is used for finding its most influencing and non-influencing categorical variable. A statistically influencing categorical variable is one where the group means are not the same and there is difference in at least two of them. </i>
  <p><img src='ExploriPy/doc_images/Influencing Categorical Variables - Based on ANOVA.png'> </p>
- <br> 
+ 
 
 * Categories with Similar Distributions <br>
 <i> Based on PostHoc Test (Tukey HSD), get the categories with similar distributions and plot the distributions as well.
 Once we know that the categorical variable influences the target variable then the Tukey HSD - Post Hoc Test is done. The Null hypothesis is, there is no difference in the means of the distribution. This is done as the Anova test can only tell if the variables are significant and not where the significance lies. The test will compare all possible group of pairs. </i>
 <p><img src='ExploriPy/doc_images/Categories with Similar Distributions.png'> </p>
-<br> 
+
     
 #### Continuous Vs Target 
 <br>
@@ -129,22 +126,21 @@ Once we know that the categorical variable influences the target variable then t
 * Box Plot for each of the Continuous Variables <br>
 * Histogram and Distribution for each of the Continuous Variables <br>
 <p><img src='ExploriPy/doc_images/Stats on Continuous Variables.png'> </p>
-<br> 
+
 
 #### Continuous Vs Target Categorical Feature 
-<br>
 * Influencing Categorical Variables based on ANOVA <br>
 * Categories with Similar Distributions <br>
 * Based on PostHoc Test (Tukey HSD), get the categories with similar distributions and plot the distributions as well. <br>
 
 #### Continuous Vs Target Continuous Feature 
-<br>
-* Dependent Continuous Variables based on Correlation <br>
+
+* Dependent Continuous Variables based on Correlation
 <p><img src='ExploriPy/doc_images/Dependent variables based on Correlation.png'> </p><br> 
-* Scatter Plot for Continuous with Continuous Target variable <br>
-<p><img src='ExploriPy/doc_images/Scatter Plot.PNG'> </p><br> 
-* Correlation Heatmap, with all the continuous variables, considering only combinations with correlation >=0.5 or <=-0.5 <br>
-<p><img src='ExploriPy/doc_images/Correlation Heatmap.PNG'> </p><br> 
+* Scatter Plot for Continuous with Continuous Target variable 
+<p><img src='ExploriPy/doc_images/Scatter Plot.PNG'> </p>
+* Correlation Heatmap, with all the continuous variables, considering only combinations with correlation >=0.5 or <=-0.5 
+<p><img src='ExploriPy/doc_images/Correlation Heatmap.PNG'> </p>
                                                                                                                         
 
 
