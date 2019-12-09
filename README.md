@@ -132,7 +132,7 @@ Once we know that the categorical variable influences the target variable then t
 * Scatter Plot for Continuous with Continuous Target variable <br>
 <p><img src='/ExploriPy/doc_images/Scatter Plot.PNG'> <br> 
 * Correlation Heatmap, with all the continuous variables, considering only combinations with correlation >=0.5 or <=-0.5 <br>
-<p><img src='/ExploriPy/doc_imagesCorrelation Heatmap.PNG'> <br> 
+<p><img src='/ExploriPy/doc_images/Correlation Heatmap.PNG'> <br> 
                                                                                                                         
 
 
