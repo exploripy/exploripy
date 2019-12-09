@@ -128,11 +128,11 @@ Once we know that the categorical variable influences the target variable then t
 #### Continuous Vs Target Continuous Feature 
 <br>
 * Dependent Continuous Variables based on Correlation <br>
-<p><img src='/ExploriPy/doc_images/Correlation Heatmap.png'> <br> 
+<p><img src='/ExploriPy/doc_images/Dependent variables based on Correlation.png'> <br> 
 * Scatter Plot for Continuous with Continuous Target variable <br>
-<p><img src='/ExploriPy/doc_images/Scatter plot.PNG'> <br> 
+<p><img src='/ExploriPy/doc_images/Scatter Plot.PNG'> <br> 
 * Correlation Heatmap, with all the continuous variables, considering only combinations with correlation >=0.5 or <=-0.5 <br>
-<p><img src='/ExploriPy/doc_images/Correlation Heatmap.png'> <br> 
+<p><img src='/ExploriPy/doc_imagesCorrelation Heatmap.PNG'> <br> 
                                                                                                                         
 
 
