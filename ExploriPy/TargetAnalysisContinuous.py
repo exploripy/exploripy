@@ -66,11 +66,13 @@ class TargetAnalysisContinuous:
 		this_dir, filename = os.path.split(pth[0])
 
 		filename = 'HTMLTemplate\\dist\\HTMLTemplate_target_Continuous.html'
-		if platform.system() == 'Linux':
-			filename = 'ExploriPy/HTMLTemplate/dist/HTMLTemplate_target_Continuous.html'
-			Template_PATH = os.path.join(this_dir, filename)
-		else:
+		
+        if platform.system() == 'Windows':
 			this_dir, this_filename = os.path.split(__file__)
+			Template_PATH = os.path.join(this_dir, filename)
+        #if platform.system() == 'Linux':
+        else:
+			filename = 'ExploriPy/HTMLTemplate/dist/HTMLTemplate_target_Continuous.html'
 			Template_PATH = os.path.join(this_dir, filename)
 		
 		with open(Template_PATH) as file:
@@ -165,7 +167,7 @@ class TargetAnalysisContinuous:
 		this_dir, this_filename = os.path.split(__file__)
 		OutFileName = os.path.join(this_dir, 'HTMLTemplate/dist/output/'+feature + '.png')
 		if platform.system() =='Linux':
-			OutFileName = os.path.join(this_dir, 'ExploriPy/HTMLTemplate/dist/output/' + feature + '.png')
+			OutFileName = os.path.join(this_dir, 'HTMLTemplate/dist/output/' + feature + '.png')
 		plt.savefig(OutFileName)
 		
 		return OutFileName
@@ -179,7 +181,7 @@ class TargetAnalysisContinuous:
 		this_dir, this_filename = os.path.split(__file__)
 		OutFileName = os.path.join(this_dir, 'HTMLTemplate/dist/output/'+feature + '_regPlot.png')
 		if platform.system() =='Linux':
-			OutFileName = os.path.join(this_dir, 'ExploriPy/HTMLTemplate/dist/output/' + feature + '_regPlot.png')
+			OutFileName = os.path.join(this_dir, 'HTMLTemplate/dist/output/' + feature + '_regPlot.png')
 		plt.savefig(OutFileName)
 		
 		return OutFileName
@@ -339,53 +341,55 @@ class TargetAnalysisContinuous:
 		return g1.T.to_dict().values()
 		
 	def GroupTukeyHSD(self,continuous, categorical):
-		
-		mc = MultiComparison(continuous, categorical)
-		result = mc.tukeyhsd()
-		reject = result.reject
-		meandiffs = result.meandiffs
-		UniqueGroup = mc.groupsunique
-		group1 = [UniqueGroup[index] for index in mc.pairindices[0]]
-		group2 = [UniqueGroup[index] for index in mc.pairindices[1]]
-		reject = result.reject
-		meandiffs = [round(float(meandiff),3) for meandiff in result.meandiffs]
-		columns = ['Group 1', "Group 2", "Mean Difference", "Reject"]
-		TukeyResult = pd.DataFrame(np.column_stack((group1, group2, meandiffs, reject)), columns=columns)
-		'''
-			Once Tukey HSD test is done. Select only those entries, with Reject=False. 
-			This implies, only entries with similar distribution is selected.
-			Once selected, group them into different distributions.
-		'''		
-		TukeyResult_false = TukeyResult[TukeyResult['Reject']=='False']
-		overall_distribution_list = []
-		same_distribution_list = []		
-		if len(TukeyResult_false) > 0:
-			for group1 in TukeyResult_false['Group 1'].unique():
-				if group1 not in overall_distribution_list:
-					temp_list=[]
-					temp_result = TukeyResult_false[TukeyResult_false['Group 1']== group1]
-					overall_distribution_list.append(group1)
-					for entry in list(temp_result['Group 2'].unique()):
-						if entry not in overall_distribution_list:
-							overall_distribution_list.append(entry)
-							temp_list.append(entry)
-					temp_list.append(group1)
-			#         if temp_result['Group 2'].nunique()>1:
-			#             temp_list.extend((temp_result['Group 2'].unique()))
-			#         else:
-			#             temp_list.append((temp_result['Group 2'].unique()[0]))
-					same_distribution_list.append(dict(list_name=group1.replace(" ", "_"), lists=temp_list, length=len(temp_list)))
-			if len(set(categorical.unique())-set(overall_distribution_list)) >0:
-				missing_categories = list(set(categorical.unique())-set(overall_distribution_list))
-				for group1 in missing_categories:
+		try:
+			mc = MultiComparison(continuous, categorical)
+			result = mc.tukeyhsd()
+			reject = result.reject
+			meandiffs = result.meandiffs
+			UniqueGroup = mc.groupsunique
+			group1 = [UniqueGroup[index] for index in mc.pairindices[0]]
+			group2 = [UniqueGroup[index] for index in mc.pairindices[1]]
+			reject = result.reject
+			meandiffs = [round(float(meandiff),3) for meandiff in result.meandiffs]
+			columns = ['Group 1', "Group 2", "Mean Difference", "Reject"]
+			TukeyResult = pd.DataFrame(np.column_stack((group1, group2, meandiffs, reject)), columns=columns)
+			'''
+				Once Tukey HSD test is done. Select only those entries, with Reject=False. 
+				This implies, only entries with similar distribution is selected.
+				Once selected, group them into different distributions.
+			'''
+			TukeyResult_false = TukeyResult[TukeyResult['Reject']=='False']
+			overall_distribution_list = []
+			same_distribution_list = []
+			if len(TukeyResult_false) > 0:
+				for group1 in TukeyResult_false['Group 1'].unique():
+					if group1 not in overall_distribution_list:
+						temp_list=[]
+						temp_result = TukeyResult_false[TukeyResult_false['Group 1']== group1]
+						overall_distribution_list.append(group1)
+						for entry in list(temp_result['Group 2'].unique()):
+							if entry not in overall_distribution_list:
+								overall_distribution_list.append(entry)
+								temp_list.append(entry)
+						temp_list.append(group1)
+				#         if temp_result['Group 2'].nunique()>1:
+				#             temp_list.extend((temp_result['Group 2'].unique()))
+				#         else:
+				#             temp_list.append((temp_result['Group 2'].unique()[0]))
+						same_distribution_list.append(dict(list_name=group1.replace(" ", "_"), lists=temp_list, length=len(temp_list)))
+				if len(set(categorical.unique())-set(overall_distribution_list)) >0:
+					missing_categories = list(set(categorical.unique())-set(overall_distribution_list))
+					for group1 in missing_categories:
+						same_distribution_list.append(dict(list_name=group1.replace(" ", "_"), lists=[group1], length=1))
+
+			else:
+				for group1 in categorical.unique():
 					same_distribution_list.append(dict(list_name=group1.replace(" ", "_"), lists=[group1], length=1))
 
-		else:
-			for group1 in categorical.unique():
-				same_distribution_list.append(dict(list_name=group1.replace(" ", "_"), lists=[group1], length=1))
-		
-		g1 = pd.DataFrame(same_distribution_list)
-		return (g1.sort_values('length',ascending=False))
+			g1 = pd.DataFrame(same_distribution_list).sort_values('length', ascending=False)
+		except:
+			g1 = pd.DataFrame()
+		return g1
 		
 		
 	def TukeyHistogram(self, GroupTukeyHSD_df, CategoricalFeature):

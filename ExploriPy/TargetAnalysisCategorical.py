@@ -65,11 +65,13 @@ class TargetAnalysisCategorical:
 		if self.target in self.CategoricalFeatures:
 			filename = 'HTMLTemplate\\dist\\HTMLTemplate_target_Categorical.html'
 
-			if platform.system() =='Linux':
-				filename = 'ExploriPy/HTMLTemplate/dist/HTMLTemplate_target_Categorical.html'
-				Template_PATH = os.path.join(this_dir, filename)
-			else:
+			
+            if platform.system() == 'Windows':			
 				this_dir, this_filename = os.path.split(__file__)
+				Template_PATH = os.path.join(this_dir, filename)
+            #if platform.system() =='Linux':
+            else:
+				filename = 'ExploriPy/HTMLTemplate/dist/HTMLTemplate_target_Categorical.html'
 				Template_PATH = os.path.join(this_dir, filename)
 
 		elif self.target in self.ContinuousFeatures:
