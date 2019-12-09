@@ -52,8 +52,8 @@ Parameter for TargetAnalysis: <br>
 * Target = This will be the target variable, against which all the analysis and statistical testes will be performed
 
 
-#### Output <br>
-The output of the package is a HTML file with the following features. <br>
+#### Output
+<br> The output of the package is a HTML file with the following features. <br>
 
 #### List of Features <br>
 * List of Features available and their datatypes. <br>
