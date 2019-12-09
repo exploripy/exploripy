@@ -50,27 +50,21 @@ eda.TargetAnalysis('Item_Outlet_Sales') # For Target Specific Analysis
 Parameter for TargetAnalysis: <br>
 * Target = This will be the target variable, against which all the analysis and statistical testes will be performed
 
-
 #### Output
 The output of the package is a HTML file with the following features.
 
 #### List of Features
-
 * List of Features available and their datatypes. 
 <p><img src='ExploriPy/doc_images/List of Features.png'></p>
 
 * Percentage of Categorical, Continuous and Other Variables.
 <p><img src='ExploriPy/doc_images/Percentage of each type of Feature.png'> </p>
 
-
 #### Null Values
-
 Percentage of null values in each column. Additionally, a bar chart is also populated with the data.
 <p><img src='ExploriPy/doc_images/Null Values.png'> </p> 
 
-
 #### Target Variable
-
 Info displayed for Target Variable: <br>
 * Total Number of Records <br>
 * Total Number of Nulls in Target <br>
@@ -81,7 +75,6 @@ Info displayed for Target Variable: <br>
 * Pie Chart on Percentage of Categorical Variables 
 <p><img src='ExploriPy/doc_images/Target Categorical.png'> </p>
 
- 
 **For Continuous Target Variable** <br>
 * Statistics on the Continuous Target Variable <br>
 * Distribution of the Continuous Target Variable <br>
@@ -92,7 +85,6 @@ List of Top 30 categories along with their count and percentage, for every categ
 <p><img src='ExploriPy/doc_images/Categorical Count.png'> </p>
 
 #### For Target Categorical Feature 
-
 * Dependent list of variables, based on ChiSquare Test of Independence <br>
 <i> Chi square test is done to test the independence of two Categorical variable. The test is used when both the independent variable and the dependent variable are both categorical. When two variables are statistically independent then they are not related to each other i.e. which category an object falls in the independent variable will not determine the category it will fall in the dependent variable. <br>
 The P values gives the probability that the null hypothesis is true. Usually the null hypothesis states that there is no relationship between the two variables. </i>
@@ -106,14 +98,11 @@ The P values gives the probability that the null hypothesis is true. Usually the
 * Null Percentage for each of the category, when compared with number of null records in the Target variable. This will help to determine, if there is any stream of data, which has the problem.
  <p><img src='ExploriPy/doc_images/Categorical Vs Null Percentage in Target.png'> </p>
 
- 
 #### For Target Continuous Feature: 
-
 * Influencing Categorical Variables based on ANOVA (Analysis of variance) <br>
 <i>This test is done for a selected target variable and it is used for finding its most influencing and non-influencing categorical variable. A statistically influencing categorical variable is one where the group means are not the same and there is difference in at least two of them. </i>
  <p><img src='ExploriPy/doc_images/Influencing Categorical Variables - Based on ANOVA.png'> </p>
  
-
 * Categories with Similar Distributions <br>
 <i> Based on PostHoc Test (Tukey HSD), get the categories with similar distributions and plot the distributions as well.
 Once we know that the categorical variable influences the target variable then the Tukey HSD - Post Hoc Test is done. The Null hypothesis is, there is no difference in the means of the distribution. This is done as the Anova test can only tell if the variables are significant and not where the significance lies. The test will compare all possible group of pairs. </i>
@@ -121,7 +110,6 @@ Once we know that the categorical variable influences the target variable then t
 
     
 #### Continuous Vs Target 
-<br>
 * Statistics for each of the Continuous Variables <br>
 * Box Plot for each of the Continuous Variables <br>
 * Histogram and Distribution for each of the Continuous Variables <br>
