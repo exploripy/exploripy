@@ -18,6 +18,7 @@ import statsmodels.api as sm
 from statsmodels.formula.api import ols
 import warnings
 warnings.filterwarnings('ignore')
+import platform
 
 class TargetAnalysisContinuous: 
 	def __init__(self, df, CategoricalFeatures, ContinuousFeatures, OtherFeatures, target, title):
