@@ -60,7 +60,7 @@ Parameter for TargetAnalysis: <br>
 <p><img src='ExploriPy/doc_images/List of Features.png'> <br>
 * Percentage of Categorical, Continuous and Other Variables.
 <p><img src='ExploriPy/doc_images/Percentage of each type of Feature.png'> 
-<br>.
+<br>
     
 #### Null Values
 <br>
