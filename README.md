@@ -52,16 +52,16 @@ Parameter for TargetAnalysis: <br>
 
 
 #### Output
-<br> The output of the package is a HTML file with the following features. <br>
+The output of the package is a HTML file with the following features.
 
 #### List of Features
-<br>
+
 * List of Features available and their datatypes. <br>
 <p><img src='ExploriPy/doc_images/List of Features.png'></p>
-<br>
+
 * Percentage of Categorical, Continuous and Other Variables.
 <p><img src='ExploriPy/doc_images/Percentage of each type of Feature.png'> </p>
-<br>
+
 
 #### Null Values
 <br>
