@@ -61,8 +61,7 @@ Parameter for TargetAnalysis: <br>
 * Percentage of Categorical, Continuous and Other Variables.
 <p><img src='ExploriPy/doc_images/Percentage of each type of Feature.png'> 
 <br>
-&nbsp;
-<br>
+
 #### Null Values
 <br>
 Percentage of null values in each column. Additionally, a bar chart is also populated with the data. <br>
