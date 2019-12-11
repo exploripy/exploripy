@@ -133,7 +133,7 @@ Once we know that the categorical variable influences the target variable then t
 <hr>
 
 ### Authors & License
-The ExploriPy package is released under a <a href="https://github.com/exploripy/exploripy/blob/master/LICENSE"> MIT License</a>. Dominance Analysis Python package has been developed by <a href="https://github.com/Vibish"> Kunjithapatham Sivakumar</a>, <a href="https://github.com/quintshekhar"> Shashank Shekhar</a> and <a href="https://github.com/bhagatsajan0073"> Sajan Bhagat</a>, . Pull requests submitted to the GitHub Repo are highly encouraged!
+The ExploriPy package is released under a <a href="https://github.com/exploripy/exploripy/blob/master/LICENSE"> MIT License</a>. ExploriPy Python package has been developed by <a href="https://github.com/Vibish"> Kunjithapatham Sivakumar</a>, <a href="https://github.com/quintshekhar"> Shashank Shekhar</a> and <a href="https://github.com/bhagatsajan0073"> Sajan Bhagat</a>, . Pull requests submitted to the GitHub Repo are highly encouraged!
 
 <hr>
 
