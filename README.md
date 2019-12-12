@@ -2,7 +2,7 @@
 [![PyPI version](https://badge.fury.io/py/ExploriPy.svg)](https://badge.fury.io/py/exploripy)
 [![Downloads](https://pepy.tech/badge/ExploriPy)](https://pepy.tech/project/ExploriPy) 
 <a href="https://github.com/Vibish/exploripy/blob/master/LICENSE">
-  <img src="https://img.shields.io/github/license/Vibish/exploripy.svg">
+  <img src="https://img.shields.io/github/license/exploripy/exploripy">
 </a>
 <a href="https://github.com/Vibish/exploripy/stargazers">
   <img src="https://img.shields.io/github/stars/Vibish/exploripy.svg">
