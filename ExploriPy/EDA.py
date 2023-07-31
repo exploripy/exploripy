@@ -108,8 +108,8 @@ class EDA:
 		'''
 		Main function to be called
 		'''
-		filename = 'HTMLTemplate\\dist\\HTMLTemplate_V2.html'
-		this_dir, this_filename = os.path.split(__file__)
+		filename = 'HTMLTemplate/dist/HTMLTemplate_V2.html'
+    		this_dir, this_filename = os.path.split(__file__)
 		
 		Template_PATH = os.path.join(this_dir, filename)
 
