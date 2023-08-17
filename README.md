@@ -1,6 +1,6 @@
 # ExploriPy
 [![PyPI version](https://badge.fury.io/py/ExploriPy.svg)](https://badge.fury.io/py/exploripy)
-[![Downloads](https://pepy.tech/badge/ExploriPy)](https://pepy.tech/project/ExploriPy) 
+[![Downloads](https://static.pepy.tech/badge/ExploriPy)](https://pepy.tech/project/ExploriPy)
 <a href="https://github.com/Vibish/exploripy/blob/master/LICENSE">
   <img src="https://img.shields.io/github/license/exploripy/exploripy">
 </a>
